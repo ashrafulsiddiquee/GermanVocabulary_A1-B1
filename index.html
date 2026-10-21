@@ -756,6 +756,7 @@
       align-items: center;
       gap: 0.5rem;
       justify-self: end;
+      flex-wrap: wrap;
     }
 
     @media (max-width: 860px) {
@@ -763,6 +764,131 @@
         justify-self: start;
         margin-top: 0.25rem;
       }
+    }
+
+    /* Card Expansion: Grammatical Synonyms, Verb Conjugations & Antonyms */
+    .word-item-wrapper {
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .word-item-wrapper:last-child {
+      border-bottom: none;
+    }
+
+    .word-item-wrapper .word-row {
+      border-bottom: none;
+    }
+
+    .details-expansion-card {
+      display: none;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      transition: background-color 0.15s ease;
+    }
+
+    .details-expansion-card.open {
+      display: block;
+    }
+
+    .word-item-wrapper .details-expansion-card {
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      padding: 1.125rem 1.5rem 1.35rem;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .details-col {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.625rem;
+      padding: 0.95rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .details-col-title {
+      font-family: var(--font-display);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .conj-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+
+    .conj-table td {
+      padding: 0.22rem 0.25rem;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .conj-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .conj-pronoun {
+      color: var(--text-muted);
+      width: 38%;
+      font-weight: 500;
+    }
+
+    .conj-form {
+      color: var(--text-primary);
+      font-weight: 700;
+      font-family: var(--font-display);
+    }
+
+    .details-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+    }
+
+    .details-list-item {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.2rem 0;
+    }
+
+    .details-term-de {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .details-term-gloss {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: right;
     }
 
     /* Mode 3: Quiz Mode */
@@ -1282,13 +1408,17 @@
             <div class="progress-fill" id="fcProgressBar" style="width: 1%;"></div>
           </div>
 
-          <!-- Action Buttons: Previous, Next, Shuffle, Mark as Hard -->
+          <!-- Action Buttons: Previous, Next, Shuffle, Show Details, Mark as Hard -->
           <div class="flashcard-controls-bar">
             <div class="control-group">
               <button type="button" class="btn" id="fcPrevBtn">← Previous</button>
               <button type="button" class="btn btn-primary" id="fcNextBtn">Next →</button>
             </div>
             <div class="control-group">
+              <button type="button" class="btn" id="fcToggleDetailsBtn" aria-expanded="false">
+                <span id="fcDetailsBtnIcon" aria-hidden="true">▾</span>
+                <span id="fcDetailsBtnLabel">Show Details</span>
+              </button>
               <button type="button" class="btn" id="fcShuffleBtn">⇄ Shuffle Deck</button>
               <button type="button" class="btn btn-star" id="fcMarkHardMainBtn">
                 <span id="fcMainStarIcon" aria-hidden="true">☆</span>
@@ -1296,6 +1426,9 @@
               </button>
             </div>
           </div>
+
+          <!-- Flashcard Expandable Grammatical Details Card -->
+          <div class="details-expansion-card" id="fcDetailsExpansion" role="region" aria-label="Word Grammatical Details"></div>
         </div>
 
         <!-- Right Control Panel: Deck Filter & Study Controls -->
@@ -1329,6 +1462,7 @@
           <ul class="shortcut-list" aria-label="Keyboard Shortcuts">
             <li class="shortcut-item"><span>Flip Card</span><kbd>Space</kbd></li>
             <li class="shortcut-item"><span>Previous / Next</span><kbd>← / →</kbd></li>
+            <li class="shortcut-item"><span>Show / Hide Details</span><kbd>D</kbd></li>
             <li class="shortcut-item"><span>Pronounce German</span><kbd>P</kbd></li>
             <li class="shortcut-item"><span>Toggle Hard Word</span><kbd>S</kbd></li>
           </ul>
@@ -1871,11 +2005,656 @@
       }
 
       // ==========================================
+      // GRAMMATICAL DETAILS ENGINE (CONJUGATIONS, SYNONYMS & ANTONYMS)
+      // ==========================================
+      const IRREGULAR_VERBS = {
+        "sein": { ich: "bin", du: "bist", er: "ist", wir: "sind", ihr: "seid", sie: "sind", perfekt: "ist gewesen" },
+        "haben": { ich: "habe", du: "hast", er: "hat", wir: "haben", ihr: "habt", sie: "haben", perfekt: "hat gehabt" },
+        "werden": { ich: "werde", du: "wirst", er: "wird", wir: "werden", ihr: "werdet", sie: "werden", perfekt: "ist geworden" },
+        "können": { ich: "kann", du: "kannst", er: "kann", wir: "können", ihr: "könnt", sie: "können", perfekt: "hat gekonnt" },
+        "müssen": { ich: "muss", du: "musst", er: "muss", wir: "müssen", ihr: "müsst", sie: "müssen", perfekt: "hat gemusst" },
+        "dürfen": { ich: "darf", du: "darfst", er: "darf", wir: "dürfen", ihr: "dürft", sie: "dürfen", perfekt: "hat gedurft" },
+        "wollen": { ich: "will", du: "willst", er: "will", wir: "wollen", ihr: "wollt", sie: "wollen", perfekt: "hat gewollt" },
+        "sollen": { ich: "soll", du: "sollst", er: "soll", wir: "sollen", ihr: "sollt", sie: "sollen", perfekt: "hat gesollt" },
+        "mögen": { ich: "mag", du: "magst", er: "mag", wir: "mögen", ihr: "mögt", sie: "mögen", perfekt: "hat gemocht" },
+        "möchten": { ich: "möchte", du: "möchtest", er: "möchte", wir: "möchten", ihr: "möchtet", sie: "möchten", perfekt: "hat gewollt / gemocht" },
+        "wissen": { ich: "weiß", du: "weißt", er: "weiß", wir: "wissen", ihr: "wisst", sie: "wissen", perfekt: "hat gewusst" },
+        "sprechen": { ich: "spreche", du: "sprichst", er: "spricht", wir: "sprechen", ihr: "sprecht", sie: "sprechen", perfekt: "hat gesprochen" },
+        "lesen": { ich: "lese", du: "liest", er: "liest", wir: "lesen", ihr: "lest", sie: "lesen", perfekt: "hat gelesen" },
+        "sehen": { ich: "sehe", du: "siehst", er: "sieht", wir: "sehen", ihr: "seht", sie: "sehen", perfekt: "hat gesehen" },
+        "essen": { ich: "esse", du: "isst", er: "isst", wir: "essen", ihr: "esst", sie: "essen", perfekt: "hat gegessen" },
+        "geben": { ich: "gebe", du: "gibst", er: "gibt", wir: "geben", ihr: "gebt", sie: "geben", perfekt: "hat gegeben" },
+        "nehmen": { ich: "nehme", du: "nimmst", er: "nimmt", wir: "nehmen", ihr: "nehmt", sie: "nehmen", perfekt: "hat genommen" },
+        "helfen": { ich: "helfe", du: "hilfst", er: "hilft", wir: "helfen", ihr: "helft", sie: "helfen", perfekt: "hat geholfen" },
+        "treffen": { ich: "treffe", du: "triffst", er: "trifft", wir: "treffen", ihr: "trefft", sie: "treffen", perfekt: "hat getroffen" },
+        "fahren": { ich: "fahre", du: "fährst", er: "fährt", wir: "fahren", ihr: "fahrt", sie: "fahren", perfekt: "ist gefahren" },
+        "schlafen": { ich: "schlafe", du: "schläfst", er: "schläft", wir: "schlafen", ihr: "schlaft", sie: "schlafen", perfekt: "hat geschlafen" },
+        "waschen": { ich: "wasche", du: "wäschst", er: "wäscht", wir: "waschen", ihr: "wascht", sie: "waschen", perfekt: "hat gewaschen" },
+        "einladen": { ich: "lade ein", du: "lädst ein", er: "lädt ein", wir: "laden ein", ihr: "ladet ein", sie: "laden ein", perfekt: "hat eingeladen" },
+        "gefallen": { ich: "gefalle", du: "gefällst", er: "gefällt", wir: "gefallen", ihr: "gefallt", sie: "gefallen", perfekt: "hat gefallen" },
+        "ausfallen": { ich: "falle aus", du: "fällst aus", er: "fällt aus", wir: "fallen aus", ihr: "fallt aus", sie: "fallen aus", perfekt: "ist ausgefallen" },
+        "empfehlen": { ich: "empfehle", du: "empfiehlst", er: "empfiehlt", wir: "empfehlen", ihr: "empfehlt", sie: "empfehlen", perfekt: "hat empfohlen" },
+        "heißen": { ich: "heiße", du: "heißt", er: "heißt", wir: "heißen", ihr: "heißt", sie: "heißen", perfekt: "hat geheißen" },
+        "raten": { ich: "rate", du: "rätst", er: "rät", wir: "raten", ihr: "ratet", sie: "raten", perfekt: "hat geraten" },
+        "finden": { ich: "finde", du: "findest", er: "findet", wir: "finden", ihr: "findet", sie: "finden", perfekt: "hat gefunden" },
+        "arbeiten": { ich: "arbeite", du: "arbeitest", er: "arbeitet", wir: "arbeiten", ihr: "arbeitet", sie: "arbeiten", perfekt: "hat gearbeitet" },
+        "antworten": { ich: "antworte", du: "antwortest", er: "antwortet", wir: "antworten", ihr: "antwortet", sie: "antworten", perfekt: "hat geantwortet" },
+        "warten": { ich: "warte", du: "wartest", er: "wartet", wir: "warten", ihr: "wartet", sie: "warten", perfekt: "hat gewartet" },
+        "kosten": { ich: "koste", du: "kostest", er: "kostet", wir: "kosten", ihr: "kostet", sie: "kosten", perfekt: "hat gekostet" },
+        "anfangen": { ich: "fange an", du: "fängst an", er: "fängt an", wir: "fangen an", ihr: "fangt an", sie: "fangen an", perfekt: "hat angefangen" },
+        "gehen": { ich: "gehe", du: "gehst", er: "geht", wir: "gehen", ihr: "geht", sie: "gehen", perfekt: "ist gegangen" },
+        "stehen": { ich: "stehe", du: "stehst", er: "steht", wir: "stehen", ihr: "steht", sie: "stehen", perfekt: "hat gestanden" },
+        "verstehen": { ich: "verstehe", du: "verstehst", er: "versteht", wir: "verstehen", ihr: "versteht", sie: "verstehen", perfekt: "hat verstanden" },
+        "kommen": { ich: "komme", du: "kommst", er: "kommt", wir: "kommen", ihr: "kommt", sie: "kommen", perfekt: "ist gekommen" },
+        "bekommen": { ich: "bekomme", du: "bekommst", er: "bekommt", wir: "bekommen", ihr: "bekommt", sie: "bekommen", perfekt: "hat bekommen" },
+        "bringen": { ich: "bringe", du: "bringst", er: "bringt", wir: "bringen", ihr: "bringt", sie: "bringen", perfekt: "hat gebracht" },
+        "denken": { ich: "denke", du: "denkst", er: "denkt", wir: "denken", ihr: "denkt", sie: "denken", perfekt: "hat gedacht" },
+        "kennen": { ich: "kenne", du: "kennst", er: "kennt", wir: "kennen", ihr: "kennt", sie: "kennen", perfekt: "hat gekannt" },
+        "schreiben": { ich: "schreibe", du: "schreibst", er: "schreibt", wir: "schreiben", ihr: "schreibt", sie: "schreiben", perfekt: "hat geschrieben" },
+        "bleiben": { ich: "bleibe", du: "bleibst", er: "bleibt", wir: "bleiben", ihr: "bleibt", sie: "bleiben", perfekt: "ist geblieben" },
+        "steigen": { ich: "steige", du: "steigst", er: "steigt", wir: "steigen", ihr: "steigt", sie: "steigen", perfekt: "ist gestiegen" },
+        "scheinen": { ich: "scheine", du: "scheinst", er: "scheint", wir: "scheinen", ihr: "scheint", sie: "scheinen", perfekt: "hat geschienen" },
+        "vergessen": { ich: "vergesse", du: "vergisst", er: "vergisst", wir: "vergessen", ihr: "vergesst", sie: "vergessen", perfekt: "hat vergessen" },
+        "trinken": { ich: "trinke", du: "trinkst", er: "trinkt", wir: "trinken", ihr: "trinkt", sie: "trinken", perfekt: "hat getrunken" },
+        "singen": { ich: "singe", du: "singst", er: "singt", wir: "singen", ihr: "singt", sie: "singen", perfekt: "hat gesungen" },
+        "schwimmen": { ich: "schwimme", du: "schwimmst", er: "schwimmt", wir: "schwimmen", ihr: "schwimmt", sie: "schwimmen", perfekt: "ist geschwommen" },
+        "beginnen": { ich: "beginne", du: "beginnst", er: "beginnt", wir: "beginnen", ihr: "beginnt", sie: "beginnen", perfekt: "hat begonnen" },
+        "gewinnen": { ich: "gewinne", du: "gewinnst", er: "gewinnt", wir: "gewinnen", ihr: "gewinnt", sie: "gewinnen", perfekt: "hat gewonnen" },
+        "schließen": { ich: "schließe", du: "schließt", er: "schließt", wir: "schließen", ihr: "schließt", sie: "schließen", perfekt: "hat geschlossen" },
+        "fliegen": { ich: "fliege", du: "fliegst", er: "fliegt", wir: "fliegen", ihr: "fliegt", sie: "fliegen", perfekt: "ist geflogen" },
+        "ziehen": { ich: "ziehe", du: "ziehst", er: "zieht", wir: "ziehen", ihr: "zieht", sie: "ziehen", perfekt: "hat gezogen" },
+        "liegen": { ich: "liege", du: "liegst", er: "liegt", wir: "liegen", ihr: "liegt", sie: "liegen", perfekt: "hat gelegen" },
+        "sitzen": { ich: "sitze", du: "sitzt", er: "sitzt", wir: "sitzen", ihr: "sitzt", sie: "sitzen", perfekt: "hat gesessen" },
+        "bitten": { ich: "bitte", du: "bittest", er: "bittet", wir: "bitten", ihr: "bittet", sie: "bitten", perfekt: "hat gebeten" },
+        "tun": { ich: "tue", du: "tust", er: "tut", wir: "tun", ihr: "tut", sie: "tun", perfekt: "hat getan" },
+        "anrufen": { ich: "rufe an", du: "rufst an", er: "ruft an", wir: "rufen an", ihr: "ruft an", sie: "rufen an", perfekt: "hat angerufen" },
+        "zurückrufen": { ich: "rufe zurück", du: "rufst zurück", er: "ruft zurück", wir: "rufen zurück", ihr: "ruft zurück", sie: "rufen zurück", perfekt: "hat zurückgerufen" },
+        "ausleihen": { ich: "leihe aus", du: "leihst aus", er: "leiht aus", wir: "leihen aus", ihr: "leiht aus", sie: "leihen aus", perfekt: "hat ausgeliehen" }
+      };
+
+      const SEPARABLE_PREFIXES = [
+        "zurück", "vorbei", "zusammen", "weiter", "wieder", "unter", "über",
+        "nach", "rein", "raus", "weg", "mit", "vor", "aus", "ein", "auf", "an", "ab", "zu", "los", "fern"
+      ];
+
+      const SYNONYM_DICT = {
+        "ansehen": [["anschauen", "to look at"], ["betrachten", "to view / examine"], ["blicken auf", "to glance at"]],
+        "das Bild": [["das Foto", "photo"], ["die Aufnahme", "shot / picture"], ["die Grafik", "illustration"]],
+        "hören": [["zuhören", "to listen"], ["vernehmen", "to hear"], ["lauschen", "to eavesdrop / listen"]],
+        "noch einmal": [["wieder", "again"], ["erneut", "anew / once more"], ["nochmal", "once again (colloq.)"]],
+        "ankreuzen": [["markieren", "to mark"], ["auswählen", "to select"]],
+        "zuordnen": [["verbinden", "to connect"], ["sortieren", "to sort / match"]],
+        "ergänzen": [["ausfüllen", "to fill out"], ["vervollständigen", "to complete"]],
+        "machen": [["tun", "to do"], ["erledigen", "to carry out"], ["herstellen", "to make / produce"]],
+        "der Kurs": [["der Unterricht", "class / instruction"], ["das Seminar", "seminar"], ["die Schulung", "training"]],
+        "sprechen": [["reden", "to talk"], ["sagen", "to say"], ["sich unterhalten", "to converse"]],
+        "lesen": [["durchlesen", "to read through"], ["studieren", "to study / read"]],
+        "das Gespräch": [["der Dialog", "dialogue"], ["die Unterhaltung", "conversation"]],
+        "suchen": [["recherchieren", "to look up"], ["fahnden nach", "to search for"]],
+        "zeigen": [["präsentieren", "to present"], ["vorführen", "to demonstrate"]],
+        "fragen": [["erkundigen", "to inquire"], ["bitten", "to ask / request"]],
+        "die Frage": [["die Erkundigung", "inquiry"], ["das Problem", "question / issue"]],
+        "raten": [["vermuten", "to guess / suppose"], ["schätzen", "to estimate"]],
+        "das Wort": [["der Begriff", "term"], ["der Ausdruck", "expression"]],
+        "die Lektion": [["das Kapitel", "chapter"], ["die Einheit", "unit"]],
+        "meinen": [["denken", "to think"], ["glauben", "to believe"], ["bedeuten", "to mean"]],
+        "sagen": [["äußern", "to state"], ["sprechen", "to speak"], ["erzählen", "to tell"]],
+        "notieren": [["aufschreiben", "to write down"], ["festhalten", "to record"]],
+        "schreiben": [["notieren", "to note down"], ["verfassen", "to compose"]],
+        "erzählen": [["berichten", "to report"], ["schildern", "to describe"]],
+        "arbeiten": [["tätig sein", "to be employed"], ["schaffen", "to work"]],
+        "die Antwort": [["die Erwiderung", "reply"], ["die Reaktion", "response"]],
+        "heißen": [["genannt werden", "to be called"]],
+        "der Name": [["die Bezeichnung", "designation / title"]],
+        "kommen": [["ankommen", "to arrive"], ["erscheinen", "to appear"]],
+        "ein bisschen": [["ein wenig", "a little"], ["etwas", "some / slightly"]],
+        "Guten Tag": [["Hallo", "Hello"], ["Grüß Gott", "Good day (Southern)"]],
+        "Auf Wiedersehen": [["Tschüs", "Bye (informal)"], ["Bis bald", "See you soon"]],
+        "der Herr": [["der Mann", "man / gentleman"]],
+        "die Frau": [["die Dame", "lady / woman"]],
+        "das Kind": [["der Junge / das Mädchen", "boy / girl"]],
+        "danke": [["vielen Dank", "many thanks"], ["herzlichen Dank", "heartfelt thanks"]],
+        "die Entschuldigung": [["die Verzeihung", "pardon / forgiveness"]],
+        "toll": [["super", "super"], ["prima", "great"], ["wunderbar", "wonderful"]],
+        "interessant": [["spannend", "exciting / engaging"]],
+        "die Firma": [["das Unternehmen", "enterprise"], ["der Betrieb", "business"]],
+        "die Stadt": [["der Ort", "town / locality"]],
+        "das Telefon": [["das Handy", "mobile phone"], ["der Apparat", "telephone set"]],
+        "das Formular": [["der Antrag", "application form"], ["das Dokument", "document"]],
+        "lernen": [["studieren", "to study"], ["üben", "to practice"]],
+        "die Pause": [["die Unterbrechung", "break / intermission"]],
+        "der Vater": [["der Papa", "dad"]],
+        "die Mutter": [["die Mama", "mom"]],
+        "die Oma": [["die Großmutter", "grandmother"]],
+        "der Opa": [["der Großvater", "grandfather"]],
+        "der Mann": [["der Ehemann", "husband"], ["der Herr", "gentleman"]],
+        "leben": [["wohnen", "to reside"], ["existieren", "to exist"]],
+        "wohnen": [["leben", "to live"], ["residieren", "to reside"]],
+        "gut": [["super", "super"], ["prima", "fine / great"], ["schön", "nice"]],
+        "jetzt": [["zurzeit", "currently"], ["im Moment", "at the moment"], ["sofort", "right now"]],
+        "die Zahl": [["die Nummer", "number"], ["die Ziffer", "digit"]],
+        "verheiratet": [["vermählt", "wedded"]],
+        "ledig": [["alleinstehend", "single / unmarried"]],
+        "brauchen": [["benötigen", "to require"]],
+        "kaufen": [["einkaufen", "to shop"], ["erwerben", "to purchase"]],
+        "das Brötchen": [["die Semmel", "bread roll"], ["das Brot", "bread"]],
+        "der Preis": [["die Kosten", "cost"], ["die Gebühr", "fee"]],
+        "das Lebensmittel": [["das Essen", "food"], ["die Speise", "dish / food item"]],
+        "der Laden": [["das Geschäft", "shop / store"], ["der Supermarkt", "supermarket"]],
+        "die Wohnung": [["das Apartment", "apartment"], ["das Zuhause", "home"]],
+        "das Zimmer": [["der Raum", "room / space"]],
+        "alt": [["antik", "old / antique"], ["betagt", "elderly"]],
+        "neu": [["modern", "modern"], ["aktuell", "current / new"]],
+        "groß": [["riesig", "huge"], ["weit", "wide / spacious"], ["hoch", "tall"]],
+        "klein": [["winzig", "tiny"], ["kurz", "short"], ["schmal", "narrow"]],
+        "hell": [["leuchtend", "bright"], ["sonnig", "sunny"]],
+        "dunkel": [["finster", "dark / dim"]],
+        "teuer": [["kostspielig", "costly"]],
+        "billig": [["günstig", "inexpensive"], ["preiswert", "good value"]],
+        "schön": [["hübsch", "pretty"], ["attraktiv", "attractive"], ["nett", "nice"]],
+        "hässlich": [["unschön", "unattractive"]],
+        "der Fernseher": [["das TV", "television set"]],
+        "das Sofa": [["die Couch", "couch"]],
+        "der Schrank": [["die Kommode", "chest / cabinet"], ["das Regal", "shelf"]],
+        "richtig": [["korrekt", "correct"], ["genau", "exact"]],
+        "falsch": [["inkorrekt", "incorrect"], ["fehlerhaft", "faulty"]],
+        "das Handy": [["das Smartphone", "smartphone"], ["das Mobiltelefon", "cell phone"]],
+        "die Arbeit": [["der Beruf", "profession"], ["der Job", "job"], ["die Stelle", "position"]],
+        "circa (ca.)": [["ungefähr", "approximately"], ["etwa", "about"]],
+        "ungefähr": [["circa (ca.)", "approximately"], ["rund", "around"]],
+        "sofort": [["gleich", "right away"], ["direkt", "immediately"]],
+        "bezahlen": [["zahlen", "to pay"], ["begleichen", "to settle (a bill)"]],
+        "zahlen": [["bezahlen", "to pay"]],
+        "anfangen": [["beginnen", "to begin"], ["starten", "to start"]],
+        "beginnen": [["anfangen", "to start"], ["eröffnen", "to open"]],
+        "enden": [["aufhören", "to stop / finish"], ["schließen", "to close"]],
+        "müde": [["erschöpft", "exhausted"], ["schläfrig", "sleepy"]],
+        "das Kino": [["das Filmtheater", "movie theater"]],
+        "öffnen": [["aufmachen", "to open"]],
+        "aufmachen": [["öffnen", "to open"]],
+        "schließen": [["zumachen", "to close"]],
+        "zumachen": [["schließen", "to close"]],
+        "der Arzt": [["der Doktor", "doctor"], ["der Mediziner", "physician"]],
+        "der Doktor": [["der Arzt", "doctor"]],
+        "das Fahrrad": [["das Rad", "bike"]],
+        "der Beruf": [["der Job", "job"], ["die Arbeit", "work"]],
+        "das Foto": [["das Bild", "picture"]],
+        "der Spaß": [["die Freude", "joy"], ["das Vergnügen", "pleasure"]],
+        "einfach": [["leicht", "easy"], ["simpel", "simple"]],
+        "schnell": [["rasch", "quick"], ["zügig", "swift"]],
+        "krank": [["unwohl", "unwell"], ["erkältet", "having a cold"]],
+        "gesund": [["fit", "fit / well"], ["munter", "lively / well"]],
+        "üben": [["trainieren", "to train / practice"], ["wiederholen", "to repeat"]],
+        "das Buch": [["das Werk", "book / work"]],
+        "das Krankenhaus": [["die Klinik", "clinic / hospital"]],
+        "der Chef": [["der Leiter", "manager / head"]],
+        "die Stelle": [["der Job", "job"], ["der Arbeitsplatz", "workplace"]],
+        "dauern": [["währen", "to last"]],
+        "das Büro": [["das Amt", "office"]],
+        "zeigen": [["präsentieren", "to show"]],
+        "wenig": [["kaum", "hardly any"], ["gering", "little"]],
+        "bekommen": [["erhalten", "to receive"], ["kriegen", "to get"]],
+        "das Ticket": [["die Fahrkarte", "transit ticket"], ["der Fahrschein", "ticket"]],
+        "die Fahrkarte": [["das Ticket", "ticket"]],
+        "der Ausweis": [["der Pass", "passport / ID"], ["das Dokument", "document"]],
+        "wählen": [["auswählen", "to select"], ["entscheiden", "to choose"]],
+        "leise": [["ruhig", "quiet / calm"], ["still", "silent"]],
+        "ausmachen": [["ausschalten", "to switch off"]],
+        "anmachen": [["einschalten", "to switch on"]],
+        "langsam": [["gemütlich", "unhurried"]],
+        "allein": [["einsam", "lonely / alone"], ["selbstständig", "independent"]],
+        "verstehen": [["begreifen", "to comprehend"]],
+        "helfen": [["unterstützen", "to support"]],
+        "das Geld": [["das Bargeld", "cash"]],
+        "die Reise": [["die Fahrt", "trip / journey"], ["der Ausflug", "excursion"]],
+        "weh tun": [["schmerzen", "to ache / hurt"]],
+        "lustig": [["witzig", "funny"], ["fröhlich", "cheerful"]],
+        "die Apotheke": [["die Drogerie", "drugstore"]],
+        "verwenden": [["benutzen", "to use"], ["gebrauchen", "to utilize"]],
+        "der Ort": [["die Stadt", "town / city"], ["der Platz", "place"]],
+        "schicken": [["senden", "to send"]],
+        "die Bücherei": [["die Bibliothek", "library"]],
+        "die Bibliothek": [["die Bücherei", "library"]],
+        "das Gleis": [["der Bahnsteig", "platform"]],
+        "die Tasche": [["die Tüte", "bag"], ["der Koffer", "suitcase"]],
+        "kaputt": [["defekt", "defective"], ["gebrochen", "broken"]],
+        "reparieren": [["instand setzen", "to fix / repair"]],
+        "sauer": [["wütend", "angry"], ["ärgerlich", "annoyed"]],
+        "die Kleider": [["die Kleidung", "clothing"], ["die Mode", "fashion"]],
+        "der Urlaub": [["die Ferien", "holidays / vacation"]],
+        "bestellen": [["ordern", "to order"], ["reservieren", "to book"]],
+        "günstig": [["billig", "cheap"], ["preiswert", "affordable"]],
+        "zufrieden": [["glücklich", "happy"], ["froh", "glad"]],
+        "feiern": [["zelebrieren", "to celebrate"]],
+        "das Geschenk": [["das Präsent", "present"]],
+        "putzen": [["reinigen", "to clean"], ["waschen", "to wash"]]
+      };
+
+      const ANTONYM_DICT = {
+        "ja": [["nein", "no"]],
+        "nein": [["ja", "yes"]],
+        "kommen": [["gehen", "to go"], ["abfahren", "to depart"]],
+        "gehen": [["kommen", "to come"], ["bleiben", "to stay"]],
+        "Guten Morgen": [["Gute Nacht", "Good night"], ["Guten Abend", "Good evening"]],
+        "Gute Nacht": [["Guten Morgen", "Good morning"], ["Guten Tag", "Good day"]],
+        "Guten Tag": [["Gute Nacht", "Good night"], ["Auf Wiedersehen", "Goodbye"]],
+        "Auf Wiedersehen": [["Guten Tag", "Hello / Good day"], ["Willkommen", "Welcome"]],
+        "der Herr": [["die Dame", "lady"], ["die Frau", "woman"]],
+        "die Frau": [["der Mann", "man"]],
+        "der Mann": [["die Frau", "woman"]],
+        "der Vater": [["die Mutter", "mother"]],
+        "die Mutter": [["der Vater", "father"]],
+        "der Bruder": [["die Schwester", "sister"]],
+        "die Schwester": [["der Bruder", "brother"]],
+        "der Sohn": [["die Tochter", "daughter"]],
+        "die Tochter": [["der Sohn", "son"]],
+        "der Opa": [["die Oma", "grandma"]],
+        "die Oma": [["der Opa", "grandpa"]],
+        "der Großvater": [["die Großmutter", "grandmother"]],
+        "die Großmutter": [["der Großvater", "grandfather"]],
+        "der Enkel": [["die Enkelin", "granddaughter"]],
+        "der Ehemann": [["die Ehefrau", "wife"]],
+        "die Ehefrau": [["der Ehemann", "husband"]],
+        "gut": [["schlecht", "bad"], ["schlimm", "serious / bad"]],
+        "schlecht": [["gut", "good"], ["prima / super", "great"]],
+        "richtig": [["falsch", "wrong / false"]],
+        "falsch": [["richtig", "right / correct"]],
+        "zusammen": [["allein", "alone"], ["getrennt", "separated"]],
+        "allein": [["zusammen", "together"], ["gemeinsam", "jointly"]],
+        "verheiratet": [["ledig", "single"], ["geschieden", "divorced"]],
+        "ledig": [["verheiratet", "married"]],
+        "der Norden": [["der Süden", "the south"]],
+        "der Süden": [["der Norden", "the north"]],
+        "der Osten": [["der Westen", "the west"]],
+        "der Westen": [["der Osten", "the east"]],
+        "kaufen": [["verkaufen", "to sell"]],
+        "verkaufen": [["kaufen", "to buy"]],
+        "alt": [["neu", "new (things)"], ["jung", "young (people)"]],
+        "neu": [["alt", "old"]],
+        "jung": [["alt", "old"]],
+        "groß": [["klein", "small / little"]],
+        "klein": [["groß", "large / big"]],
+        "hell": [["dunkel", "dark / dim"]],
+        "dunkel": [["hell", "bright / light"]],
+        "teuer": [["billig", "cheap"], ["günstig", "inexpensive"]],
+        "billig": [["teuer", "expensive"]],
+        "günstig": [["teuer", "expensive"]],
+        "schön": [["hässlich", "ugly"]],
+        "hässlich": [["schön", "beautiful / nice"]],
+        "hier": [["dort", "there"], ["da drüben", "over there"]],
+        "dort": [["hier", "here"]],
+        "schmal": [["breit", "wide"], ["weit", "broad"]],
+        "breit": [["schmal", "narrow"]],
+        "schwarz": [["weiß", "white"]],
+        "weiß": [["schwarz", "black"]],
+        "vermieten": [["mieten", "to rent (as tenant)"]],
+        "mieten": [["vermieten", "to rent out (as landlord)"]],
+        "lang": [["kurz", "short"]],
+        "kurz": [["lang", "long"]],
+        "hoch": [["niedrig", "low"], ["tief", "deep"]],
+        "heute": [["morgen", "tomorrow"], ["gestern", "yesterday"]],
+        "morgen": [["heute", "today"], ["gestern", "yesterday"]],
+        "früh": [["spät", "late"]],
+        "spät": [["früh", "early"]],
+        "müde": [["fit", "fit / awake"], ["wach", "awake"]],
+        "vor": [["nach", "after"], ["hinter", "behind"]],
+        "nach": [["vor", "before"]],
+        "anfangen": [["enden", "to end"], ["aufhören", "to stop"]],
+        "beginnen": [["enden", "to end"]],
+        "enden": [["anfangen", "to begin"], ["beginnen", "to start"]],
+        "der Tag": [["die Nacht", "the night"]],
+        "die Nacht": [["der Tag", "the day"]],
+        "der Morgen": [["der Abend", "the evening"]],
+        "der Abend": [["der Morgen", "the morning"]],
+        "geöffnet": [["geschlossen", "closed"]],
+        "geschlossen": [["geöffnet", "open"]],
+        "öffnen": [["schließen", "to close"]],
+        "schließen": [["öffnen", "to open"]],
+        "aufmachen": [["zumachen", "to close"]],
+        "zumachen": [["aufmachen", "to open"]],
+        "anmachen": [["ausmachen", "to turn off"]],
+        "ausmachen": [["anmachen", "to turn on"]],
+        "bringen": [["abholen", "to pick up"]],
+        "abholen": [["bringen", "to bring / drop off"]],
+        "mehr": [["weniger", "less"]],
+        "viel-": [["wenig", "little / few"]],
+        "wenig": [["viel", "much / many"]],
+        "fragen": [["antworten", "to answer"]],
+        "antworten": [["fragen", "to ask"]],
+        "die Frage": [["die Antwort", "the answer"]],
+        "die Antwort": [["die Frage", "the question"]],
+        "warm": [["kalt", "cold"], ["kühl", "cool"]],
+        "kalt": [["warm", "warm"], ["heiß", "hot"]],
+        "heiß": [["kalt", "cold"]],
+        "sonnig": [["bewölkt", "cloudy"], ["regnerisch", "rainy"]],
+        "leicht": [["schwer", "difficult / heavy"]],
+        "schwer": [["leicht", "easy / light"]],
+        "plus": [["minus", "minus / below zero"]],
+        "minus": [["plus", "plus / above zero"]],
+        "der Sommer": [["der Winter", "the winter"]],
+        "der Winter": [["der Sommer", "the summer"]],
+        "der Frühling": [["der Herbst", "the autumn"]],
+        "der Herbst": [["der Frühling", "the spring"]],
+        "immer": [["nie", "never"]],
+        "nie": [["immer", "always"], ["oft", "often"]],
+        "oft": [["selten", "rarely"], ["nie", "never"]],
+        "einfach": [["schwer", "difficult"], ["kompliziert", "complicated"]],
+        "schnell": [["langsam", "slow"]],
+        "langsam": [["schnell", "fast"]],
+        "krank": [["gesund", "healthy"]],
+        "gesund": [["krank", "ill / sick"]],
+        "das Mädchen": [["der Junge", "the boy"]],
+        "der Junge": [["das Mädchen", "the girl"]],
+        "losfahren": [["ankommen", "to arrive"], ["zurückkommen", "to return"]],
+        "abfahren": [["ankommen", "to arrive"]],
+        "ankommen": [["abfahren", "to depart"]],
+        "die Abfahrt": [["die Ankunft", "arrival"]],
+        "die Ankunft": [["die Abfahrt", "departure"]],
+        "einsteigen": [["aussteigen", "to get off"]],
+        "aussteigen": [["einsteigen", "to get on / board"]],
+        "arbeitslos": [["berufstätig", "employed"]],
+        "berufstätig": [["arbeitslos", "unemployed"]],
+        "die Vollzeit": [["die Teilzeit", "part-time"]],
+        "die Teilzeit": [["die Vollzeit", "full-time"]],
+        "ganztags": [["halbtags", "half-day"]],
+        "halbtags": [["ganztags", "full-day"]],
+        "vormittags": [["nachmittags", "in the afternoon"]],
+        "nachmittags": [["vormittags", "in the morning"]],
+        "zuerst": [["zum Schluss", "at the end"], ["danach", "afterwards"]],
+        "leise": [["laut", "loud"]],
+        "laut": [["leise", "quiet"]],
+        "erlaubt (sein)": [["verboten (sein)", "forbidden"]],
+        "verboten (sein)": [["erlaubt (sein)", "allowed"]],
+        "männlich": [["weiblich", "female"]],
+        "weiblich": [["männlich", "male"]],
+        "rechts": [["links", "left"]],
+        "links": [["rechts", "right"]],
+        "über": [["unter", "under / below"]],
+        "unter": [["über", "above / over"]],
+        "oben": [["unten", "below / at the bottom"]],
+        "draußen": [["drinnen", "inside"]],
+        "dünn": [["dick", "thick"], ["weit", "wide"]],
+        "weit": [["eng", "tight / narrow"], ["nah", "near"]],
+        "rückwärts": [["vorwärts", "forwards"]],
+        "vorwärts": [["rückwärts", "backwards"]],
+        "der Eingang": [["der Ausgang", "the exit"]],
+        "der Ausgang": [["der Eingang", "the entrance"]],
+        "schmutzig": [["sauber", "clean"]],
+        "gewinnen": [["verlieren", "to lose"]]
+      };
+
+      function normalizeLookupKey(headword) {
+        return headword
+          .replace(/\(Sg\.\/Pl\.\)|\(Sg\.\)|\(Pl\.\)|\(Singular\)|\(Plural\)/gi, "")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      function conjugateGermanVerb(rawWord) {
+        let cleaned = rawWord
+          .replace(/\(sich\)\s*/i, "")
+          .replace(/\(mit\)/i, "")
+          .replace(/\(sein\)/i, "")
+          .replace(/\(leben\)/i, "")
+          .trim();
+
+        const isReflexive = /\(sich\)|^sich\s+/i.test(rawWord);
+        cleaned = cleaned.replace(/^sich\s+/i, "").trim();
+
+        // Multi-word verb expressions (e.g. "spazieren gehen", "Rad fahren", "weh tun", "Bescheid geben")
+        const parts = cleaned.split(/\s+/);
+        let prefixPhrase = "";
+        let verbInf = cleaned;
+        if (parts.length > 1) {
+          verbInf = parts[parts.length - 1];
+          prefixPhrase = parts.slice(0, -1).join(" ");
+        }
+
+        const lowerVerb = verbInf.toLowerCase();
+
+        // Direct irregular match
+        if (IRREGULAR_VERBS[lowerVerb]) {
+          const irr = IRREGULAR_VERBS[lowerVerb];
+          const suffix = prefixPhrase ? (" " + prefixPhrase) : "";
+          return {
+            infinitive: rawWord,
+            ich: irr.ich + (isReflexive ? " mich" : "") + suffix,
+            du: irr.du + (isReflexive ? " dich" : "") + suffix,
+            er: irr.er + (isReflexive ? " sich" : "") + suffix,
+            wir: irr.wir + (isReflexive ? " uns" : "") + suffix,
+            ihr: irr.ihr + (isReflexive ? " euch" : "") + suffix,
+            sie: irr.sie + (isReflexive ? " sich" : "") + suffix,
+            perfekt: irr.perfekt
+          };
+        }
+
+        // Check separable prefix + irregular or regular base verb
+        let sepPrefix = "";
+        let baseVerb = lowerVerb;
+        for (let i = 0; i < SEPARABLE_PREFIXES.length; i++) {
+          const p = SEPARABLE_PREFIXES[i];
+          if (lowerVerb.startsWith(p) && lowerVerb.length > p.length + 2) {
+            const candidateBase = lowerVerb.slice(p.length);
+            if (candidateBase.endsWith("en") || candidateBase.endsWith("n")) {
+              sepPrefix = p;
+              baseVerb = candidateBase;
+              break;
+            }
+          }
+        }
+
+        if (sepPrefix && IRREGULAR_VERBS[baseVerb]) {
+          const irr = IRREGULAR_VERBS[baseVerb];
+          const pastPart = irr.perfekt.split(" ").pop();
+          const aux = irr.perfekt.split(" ")[0];
+          return {
+            infinitive: rawWord,
+            ich: irr.ich + (isReflexive ? " mich " : " ") + sepPrefix,
+            du: irr.du + (isReflexive ? " dich " : " ") + sepPrefix,
+            er: irr.er + (isReflexive ? " sich " : " ") + sepPrefix,
+            wir: irr.wir + (isReflexive ? " uns " : " ") + sepPrefix,
+            ihr: irr.ihr + (isReflexive ? " euch " : " ") + sepPrefix,
+            sie: irr.sie + (isReflexive ? " sich " : " ") + sepPrefix,
+            perfekt: aux + " " + sepPrefix + pastPart
+          };
+        }
+
+        // Regular weak verb conjugation
+        let stem = baseVerb;
+        if (stem.endsWith("en")) stem = stem.slice(0, -2);
+        else if (stem.endsWith("n")) stem = stem.slice(0, -1);
+
+        const needsE = /[dt]$|[^aeiouäöü][mn]$/i.test(stem);
+        const endsWithS = /[sßxz]$/i.test(stem);
+
+        const ichForm = stem + "e";
+        const duForm = stem + (needsE ? "est" : (endsWithS ? "t" : "st"));
+        const erForm = stem + (needsE ? "et" : "t");
+        const wirForm = baseVerb;
+        const ihrForm = stem + (needsE ? "et" : "t");
+        const sieForm = baseVerb;
+
+        const tail = (sepPrefix ? (" " + sepPrefix) : "") + (prefixPhrase ? (" " + prefixPhrase) : "");
+        const noGe = /^(be|emp|ent|er|ge|miss|ver|zer)/i.test(baseVerb) || /ieren$/i.test(baseVerb);
+        const partII = sepPrefix
+          ? (sepPrefix + "ge" + erForm)
+          : ((noGe ? "" : "ge") + erForm);
+
+        return {
+          infinitive: rawWord,
+          ich: ichForm + (isReflexive ? " mich" : "") + tail,
+          du: duForm + (isReflexive ? " dich" : "") + tail,
+          er: erForm + (isReflexive ? " sich" : "") + tail,
+          wir: wirForm + (isReflexive ? " uns" : "") + tail,
+          ihr: ihrForm + (isReflexive ? " euch" : "") + tail,
+          sie: sieForm + (isReflexive ? " sich" : "") + tail,
+          perfekt: "hat " + partII
+        };
+      }
+
+      function isVerbEntry(item) {
+        if (item.genderCode !== "other") return false;
+        if (/^to\s+/i.test(item.en.trim()) || /\bto\s+[a-z]+/i.test(item.en)) {
+          const clean = item.headword.replace(/\(.*\)/g, "").trim();
+          return /(en|n|tun|sein)$/i.test(clean);
+        }
+        return false;
+      }
+
+      function getWordDetails(item) {
+        const key = normalizeLookupKey(item.headword);
+        const rawKey = item.de.trim();
+
+        // 1. Synonyms
+        let synonyms = SYNONYM_DICT[key] || SYNONYM_DICT[rawKey] || null;
+        if (!synonyms) {
+          // Find related vocabulary items from the same category & grammatical type
+          const related = VOCAB.filter(function(other) {
+            return other.id !== item.id && other.catIdx === item.catIdx && other.genderCode === item.genderCode;
+          }).slice(0, 3);
+          synonyms = related.map(function(r) {
+            return [r.headword, r.en + " (Verwandtes A1-Wort)"];
+          });
+        }
+
+        // 2. Antonyms
+        let antonyms = ANTONYM_DICT[key] || ANTONYM_DICT[rawKey] || null;
+        if (!antonyms) {
+          if (item.genderCode === "der" || item.genderCode === "die" || item.genderCode === "das" || item.genderCode === "pl") {
+            antonyms = [["Kein direktes Gegenteil", "Concrete noun — no lexical opposite"]];
+          } else {
+            antonyms = [["nicht " + key, "not " + item.en + " (Negation)"]];
+          }
+        }
+
+        // 3. Verb Conjugation or Noun/Adjective Inflection Table
+        let grammarBlock = null;
+        if (isVerbEntry(item)) {
+          const conj = conjugateGermanVerb(key);
+          grammarBlock = {
+            title: "Verb Conjugation (Präsens & Perfekt)",
+            speakText: "ich " + conj.ich + ", du " + conj.du + ", er " + conj.er,
+            rows: [
+              ["ich", conj.ich],
+              ["du", conj.du],
+              ["er / sie / es", conj.er],
+              ["wir", conj.wir],
+              ["ihr", conj.ihr],
+              ["sie / Sie", conj.sie],
+              ["Perfekt", conj.perfekt]
+            ]
+          };
+        } else if (item.genderCode === "der" || item.genderCode === "die" || item.genderCode === "das" || item.genderCode === "pl") {
+          const nounClean = key.replace(/^(der\/die|der\/das|der|die|das|\(das\))\s+/i, "").trim();
+          let nom = key;
+          let akk = key;
+          let dat = key;
+          if (item.genderCode === "der") {
+            nom = "der " + nounClean;
+            akk = "den " + nounClean;
+            dat = "dem " + nounClean;
+          } else if (item.genderCode === "die") {
+            nom = "die " + nounClean;
+            akk = "die " + nounClean;
+            dat = "der " + nounClean;
+          } else if (item.genderCode === "das") {
+            nom = "das " + nounClean;
+            akk = "das " + nounClean;
+            dat = "dem " + nounClean;
+          } else if (item.genderCode === "pl") {
+            nom = "die " + nounClean;
+            akk = "die " + nounClean;
+            dat = "den " + nounClean;
+          }
+          grammarBlock = {
+            title: "Noun Cases & Collocation (Deklination)",
+            speakText: nom + ", " + akk + ", " + dat,
+            rows: [
+              ["Nominativ", nom],
+              ["Akkusativ", akk],
+              ["Dativ", dat],
+              ["Plural / Info", item.pluralNote ? item.pluralNote.replace("Plural: ", "") : "Singular (Sg.)"],
+              ["Im Satz (Verb)", "ist / hat " + nom]
+            ]
+          };
+        } else {
+          grammarBlock = {
+            title: "Grammatical Usage & Conjugation Context",
+            speakText: item.exDe,
+            rows: [
+              ["Grundform", key],
+              ["Mit 'sein' (ich)", "ich bin " + key],
+              ["Mit 'sein' (er/sie/es)", "es ist " + key],
+              ["Mit 'sein' (wir/sie)", "sie sind " + key],
+              ["Verneinung", "nicht " + key]
+            ]
+          };
+        }
+
+        return {
+          grammarBlock: grammarBlock,
+          synonyms: synonyms,
+          antonyms: antonyms
+        };
+      }
+
+      function renderDetailsPanelHtml(item) {
+        const details = getWordDetails(item);
+        const gRows = details.grammarBlock.rows.map(function(pair) {
+          return (
+            '<tr>' +
+              '<td class="conj-pronoun">' + escapeHtml(pair[0]) + '</td>' +
+              '<td class="conj-form">' + escapeHtml(pair[1]) + '</td>' +
+            '</tr>'
+          );
+        }).join("");
+
+        const synList = details.synonyms.map(function(pair) {
+          return (
+            '<li class="details-list-item">' +
+              '<span class="details-term-de">' + escapeHtml(pair[0]) + '</span>' +
+              '<span class="details-term-gloss">' + escapeHtml(pair[1]) + '</span>' +
+            '</li>'
+          );
+        }).join("");
+
+        const antList = details.antonyms.map(function(pair) {
+          return (
+            '<li class="details-list-item">' +
+              '<span class="details-term-de">' + escapeHtml(pair[0]) + '</span>' +
+              '<span class="details-term-gloss">' + escapeHtml(pair[1]) + '</span>' +
+            '</li>'
+          );
+        }).join("");
+
+        return (
+          '<div class="details-grid">' +
+            '<div class="details-col">' +
+              '<div class="details-col-title">' +
+                '<span>' + escapeHtml(details.grammarBlock.title) + '</span>' +
+                '<button type="button" class="icon-btn" style="min-height:28px; padding:0.2rem 0.5rem; font-size:0.75rem;" data-speak-custom="' + escapeHtml(details.grammarBlock.speakText) + '">🔊</button>' +
+              '</div>' +
+              '<table class="conj-table"><tbody>' + gRows + '</tbody></table>' +
+            '</div>' +
+            '<div class="details-col">' +
+              '<div class="details-col-title"><span>Grammatical Synonyms &amp; Related</span></div>' +
+              '<ul class="details-list">' + synList + '</ul>' +
+            '</div>' +
+            '<div class="details-col">' +
+              '<div class="details-col-title"><span>Antonyms &amp; Opposites</span></div>' +
+              '<ul class="details-list">' + antList + '</ul>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      // ==========================================
       // MODE 1: FLASHCARDS LOGIC
       // ==========================================
       let fcDeck = VOCAB.slice();
       let fcIndex = 0;
       let fcFlipped = false;
+      let fcDetailsOpen = false;
 
       const flashcardScene = document.getElementById("flashcardScene");
 
@@ -1911,6 +2690,24 @@
       function setFlashcardFlipped(flipped) {
         fcFlipped = flipped;
         flashcardScene.classList.toggle("is-flipped", fcFlipped);
+      }
+
+      function updateFlashcardDetailsPanel() {
+        const detailsEl = document.getElementById("fcDetailsExpansion");
+        const toggleBtn = document.getElementById("fcToggleDetailsBtn");
+        const iconEl = document.getElementById("fcDetailsBtnIcon");
+        const labelEl = document.getElementById("fcDetailsBtnLabel");
+
+        toggleBtn.setAttribute("aria-expanded", fcDetailsOpen ? "true" : "false");
+        iconEl.textContent = fcDetailsOpen ? "▴" : "▾";
+        labelEl.textContent = fcDetailsOpen ? "Hide Details" : "Show Details";
+
+        if (fcDetailsOpen && fcDeck[fcIndex]) {
+          detailsEl.innerHTML = renderDetailsPanelHtml(fcDeck[fcIndex]);
+          detailsEl.classList.add("open");
+        } else {
+          detailsEl.classList.remove("open");
+        }
       }
 
       function renderCurrentFlashcard() {
@@ -1953,6 +2750,7 @@
         document.getElementById("fcProgressBar").style.width = pct + "%";
 
         syncFlashcardHardState();
+        updateFlashcardDetailsPanel();
       }
 
       function syncFlashcardHardState() {
@@ -2002,6 +2800,18 @@
       document.getElementById("fcStarFrontBtn").addEventListener("click", handleFlashcardStarClick);
       document.getElementById("fcStarBackBtn").addEventListener("click", handleFlashcardStarClick);
       document.getElementById("fcMarkHardMainBtn").addEventListener("click", handleFlashcardStarClick);
+
+      document.getElementById("fcToggleDetailsBtn").addEventListener("click", function() {
+        fcDetailsOpen = !fcDetailsOpen;
+        updateFlashcardDetailsPanel();
+      });
+
+      document.getElementById("fcDetailsExpansion").addEventListener("click", function(e) {
+        const customSpeak = e.target.closest("[data-speak-custom]");
+        if (customSpeak) {
+          speakGerman(customSpeak.getAttribute("data-speak-custom"));
+        }
+      });
 
       document.getElementById("fcPrevBtn").addEventListener("click", function() {
         fcIndex = (fcIndex - 1 + fcDeck.length) % fcDeck.length;
@@ -2054,6 +2864,9 @@
         } else if (e.key.toLowerCase() === "s") {
           e.preventDefault();
           if (fcDeck[fcIndex]) toggleHardWord(fcDeck[fcIndex].id);
+        } else if (e.key.toLowerCase() === "d") {
+          e.preventDefault();
+          document.getElementById("fcToggleDetailsBtn").click();
         }
       });
 
@@ -2061,6 +2874,7 @@
       // MODE 2: WORDS WITH SENTENCES BY CATEGORY
       // ==========================================
       let catActiveArticle = "all";
+      const expandedExplorerIds = new Set();
 
       function escapeHtml(str) {
         return String(str)
@@ -2102,28 +2916,37 @@
 
         const htmlRows = matches.map(function(item) {
           const isHard = hardWordIds.has(item.id);
+          const isExpanded = expandedExplorerIds.has(item.id);
           return (
-            '<div class="word-row">' +
-              '<div class="word-col-de">' +
-                '<div class="meta-inline">' +
-                  '<span class="' + item.genderClass + '">' + escapeHtml(item.genderLabel) + '</span>' +
-                  '<span aria-hidden="true">·</span>' +
-                  '<span class="tabular-nums">#' + item.id + '</span>' +
+            '<div class="word-item-wrapper">' +
+              '<div class="word-row">' +
+                '<div class="word-col-de">' +
+                  '<div class="meta-inline">' +
+                    '<span class="' + item.genderClass + '">' + escapeHtml(item.genderLabel) + '</span>' +
+                    '<span aria-hidden="true">·</span>' +
+                    '<span class="tabular-nums">#' + item.id + '</span>' +
+                  '</div>' +
+                  '<div class="word-title-de">' + escapeHtml(item.de) + '</div>' +
+                  '<div class="meta-inline"><span>' + escapeHtml(item.catName) + '</span></div>' +
                 '</div>' +
-                '<div class="word-title-de">' + escapeHtml(item.de) + '</div>' +
-                '<div class="meta-inline"><span>' + escapeHtml(item.catName) + '</span></div>' +
+                '<div class="word-col-en"><div>' + escapeHtml(item.en) + '</div>' + (item.bn ? '<div class="word-meaning-bn">বাংলা: ' + escapeHtml(item.bn) + '</div>' : '') + '</div>' +
+                '<div class="word-col-sentence">' +
+                  '<div class="sentence-de">' + escapeHtml(item.exDe) + '</div>' +
+                  '<div class="sentence-en">' + escapeHtml(item.exEn) + '</div>' +
+                '</div>' +
+                '<div class="word-col-actions">' +
+                  '<button type="button" class="icon-btn" data-toggle-details="' + item.id + '" aria-expanded="' + (isExpanded ? 'true' : 'false') + '">' +
+                    (isExpanded ? '▴ Hide Details' : '▾ Show Details') +
+                  '</button>' +
+                  '<button type="button" class="icon-btn" data-speak-word="' + item.id + '" title="Pronounce German word">🔊 Word</button>' +
+                  '<button type="button" class="icon-btn" data-speak-sent="' + item.id + '" title="Pronounce German example sentence">🔊 Sentence</button>' +
+                  '<button type="button" class="icon-btn star-toggle ' + (isHard ? 'active' : '') + '" data-star-id="' + item.id + '" title="Toggle Hard Word">' +
+                    (isHard ? '★ Hard' : '☆ Star') +
+                  '</button>' +
+                '</div>' +
               '</div>' +
-              '<div class="word-col-en"><div>' + escapeHtml(item.en) + '</div>' + (item.bn ? '<div class="word-meaning-bn">বাংলা: ' + escapeHtml(item.bn) + '</div>' : '') + '</div>' +
-              '<div class="word-col-sentence">' +
-                '<div class="sentence-de">' + escapeHtml(item.exDe) + '</div>' +
-                '<div class="sentence-en">' + escapeHtml(item.exEn) + '</div>' +
-              '</div>' +
-              '<div class="word-col-actions">' +
-                '<button type="button" class="icon-btn" data-speak-word="' + item.id + '" title="Pronounce German word">🔊 Word</button>' +
-                '<button type="button" class="icon-btn" data-speak-sent="' + item.id + '" title="Pronounce German example sentence">🔊 Sentence</button>' +
-                '<button type="button" class="icon-btn star-toggle ' + (isHard ? 'active' : '') + '" data-star-id="' + item.id + '" title="Toggle Hard Word">' +
-                  (isHard ? '★ Hard' : '☆ Star') +
-                '</button>' +
+              '<div class="details-expansion-card ' + (isExpanded ? 'open' : '') + '" id="explorer-details-' + item.id + '">' +
+                (isExpanded ? renderDetailsPanelHtml(item) : '') +
               '</div>' +
             '</div>'
           );
@@ -2146,6 +2969,32 @@
       });
 
       document.getElementById("catWordsList").addEventListener("click", function(e) {
+        const toggleDetailsBtn = e.target.closest("[data-toggle-details]");
+        if (toggleDetailsBtn) {
+          const id = Number(toggleDetailsBtn.getAttribute("data-toggle-details"));
+          const item = VOCAB_BY_ID.get(id);
+          const panel = document.getElementById("explorer-details-" + id);
+          if (!item || !panel) return;
+
+          if (expandedExplorerIds.has(id)) {
+            expandedExplorerIds.delete(id);
+            panel.classList.remove("open");
+            toggleDetailsBtn.textContent = "▾ Show Details";
+            toggleDetailsBtn.setAttribute("aria-expanded", "false");
+          } else {
+            expandedExplorerIds.add(id);
+            panel.innerHTML = renderDetailsPanelHtml(item);
+            panel.classList.add("open");
+            toggleDetailsBtn.textContent = "▴ Hide Details";
+            toggleDetailsBtn.setAttribute("aria-expanded", "true");
+          }
+          return;
+        }
+        const customSpeak = e.target.closest("[data-speak-custom]");
+        if (customSpeak) {
+          speakGerman(customSpeak.getAttribute("data-speak-custom"));
+          return;
+        }
         const speakWordBtn = e.target.closest("[data-speak-word]");
         if (speakWordBtn) {
           const item = VOCAB_BY_ID.get(Number(speakWordBtn.getAttribute("data-speak-word")));
