@@ -3223,7 +3223,11 @@
           <p class="section-subtitle">Track your German A1 to B1 mastery across all 2,731 words, 43 course lessons, CEFR levels, grammatical genders, quiz accuracy, and daily study streaks.</p>
         </div>
         <div class="control-group">
-          <button type="button" class="btn btn-primary" id="progOpenStreakModalBtn">🔥 15-Min Daily Goal</button>
+          <button type="button" class="btn btn-primary" id="progExportJsonBtn" title="Download your learned words and daily streak report as a PDF file">
+            <span aria-hidden="true">⬇</span>
+            <span id="progExportJsonBtnLabel">Export My Progress (PDF)</span>
+          </button>
+          <button type="button" class="btn" id="progOpenStreakModalBtn">🔥 15-Min Daily Goal</button>
           <button type="button" class="btn" id="progContinueFlashcardsBtn">Continue Flashcards</button>
           <button type="button" class="btn" id="progTakeQuizBtn">Take a Quiz</button>
         </div>
@@ -3383,6 +3387,10 @@
           <button type="button" class="icon-btn" id="streakLogFiveMinBtn" title="Log 5 minutes of offline or spoken practice">+5m Practice</button>
         </div>
         <div class="control-group">
+          <button type="button" class="btn" id="streakModalExportJsonBtn" title="Download your learned words and daily streak report as a PDF file">
+            <span aria-hidden="true">⬇</span>
+            <span id="streakModalExportBtnLabel">Export My Progress (PDF)</span>
+          </button>
           <button type="button" class="btn" id="streakModalViewAllProgressBtn">View All Progresses</button>
           <button type="button" class="btn btn-primary" id="streakModalContinueBtn">Keep Practicing</button>
         </div>
@@ -6297,6 +6305,575 @@
           startNewQuiz();
           switchMode("quiz");
         }
+      });
+
+      // Export My Progress (Downloadable Multi-Page PDF with Learned Words & Streak Data)
+      function truncateCanvasText(ctx, text, maxWidth) {
+        const str = String(text || "");
+        if (!str) return "";
+        if (ctx.measureText(str).width <= maxWidth) return str;
+        let low = 0;
+        let high = str.length;
+        while (low < high) {
+          const mid = Math.ceil((low + high) / 2);
+          if (ctx.measureText(str.slice(0, mid) + "…").width <= maxWidth) {
+            low = mid;
+          } else {
+            high = mid - 1;
+          }
+        }
+        return str.slice(0, Math.max(0, low)) + "…";
+      }
+
+      function drawRoundedRect(ctx, x, y, w, h, r, fillStyle, strokeStyle) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+        if (fillStyle) {
+          ctx.fillStyle = fillStyle;
+          ctx.fill();
+        }
+        if (strokeStyle) {
+          ctx.strokeStyle = strokeStyle;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+      }
+
+      function buildPdfFromJpegPages(jpegDataUrls, pageWidthPt, pageHeightPt) {
+        const encoder = new TextEncoder();
+        const chunks = [];
+        const offsets = [0];
+        let currentOffset = 0;
+
+        function pushStr(str) {
+          const bytes = encoder.encode(str);
+          chunks.push(bytes);
+          currentOffset += bytes.length;
+        }
+
+        function pushBytes(bytes) {
+          chunks.push(bytes);
+          currentOffset += bytes.length;
+        }
+
+        function startObj(id) {
+          offsets[id] = currentOffset;
+          pushStr(id + " 0 obj\n");
+        }
+
+        function endObj() {
+          pushStr("\nendobj\n");
+        }
+
+        function dataUrlToBytes(dataUrl) {
+          const base64 = dataUrl.split(",")[1] || "";
+          const bin = atob(base64);
+          const arr = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) {
+            arr[i] = bin.charCodeAt(i);
+          }
+          return arr;
+        }
+
+        pushStr("%PDF-1.4\n%\xFF\xFF\xFF\xFF\n");
+
+        const numPages = jpegDataUrls.length;
+        // Object IDs:
+        // 1: Catalog
+        // 2: Pages
+        // For each page i (0..numPages-1):
+        //   pageObjId = 3 + i * 3
+        //   contentObjId = 4 + i * 3
+        //   imageObjId = 5 + i * 3
+        const pageObjIds = [];
+        for (let i = 0; i < numPages; i++) {
+          pageObjIds.push(3 + i * 3);
+        }
+
+        startObj(1);
+        pushStr("<< /Type /Catalog /Pages 2 0 R >>");
+        endObj();
+
+        startObj(2);
+        pushStr("<< /Type /Pages /Kids [" + pageObjIds.map(function(id) { return id + " 0 R"; }).join(" ") + "] /Count " + numPages + " >>");
+        endObj();
+
+        for (let i = 0; i < numPages; i++) {
+          const pageObjId = 3 + i * 3;
+          const contentObjId = 4 + i * 3;
+          const imageObjId = 5 + i * 3;
+          const imgInfo = jpegDataUrls[i];
+          const jpegBytes = dataUrlToBytes(imgInfo.dataUrl);
+
+          const contentStream = "q\n" + pageWidthPt.toFixed(2) + " 0 0 " + pageHeightPt.toFixed(2) + " 0 0 cm\n/Im" + i + " Do\nQ\n";
+          const contentBytes = encoder.encode(contentStream);
+
+          startObj(pageObjId);
+          pushStr(
+            "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " +
+            pageWidthPt.toFixed(2) + " " + pageHeightPt.toFixed(2) +
+            "] /Contents " + contentObjId + " 0 R /Resources << /XObject << /Im" + i + " " + imageObjId + " 0 R >> >> >>"
+          );
+          endObj();
+
+          startObj(contentObjId);
+          pushStr("<< /Length " + contentBytes.length + " >>\nstream\n");
+          pushBytes(contentBytes);
+          pushStr("\nendstream");
+          endObj();
+
+          startObj(imageObjId);
+          pushStr(
+            "<< /Type /XObject /Subtype /Image /Width " + imgInfo.width +
+            " /Height " + imgInfo.height +
+            " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + jpegBytes.length + " >>\nstream\n"
+          );
+          pushBytes(jpegBytes);
+          pushStr("\nendstream");
+          endObj();
+        }
+
+        const totalObjects = 2 + numPages * 3;
+        const xrefOffset = currentOffset;
+        pushStr("xref\n0 " + (totalObjects + 1) + "\n");
+        pushStr("0000000000 65535 f \n");
+        for (let id = 1; id <= totalObjects; id++) {
+          const off = String(offsets[id] || 0).padStart(10, "0");
+          pushStr(off + " 00000 n \n");
+        }
+        pushStr("trailer\n<< /Size " + (totalObjects + 1) + " /Root 1 0 R >>\nstartxref\n" + xrefOffset + "\n%%EOF");
+
+        return new Blob(chunks, { type: "application/pdf" });
+      }
+
+      function exportUserProgressPdf(triggerBtnLabelId) {
+        const today = getLocalTodayStr();
+        const nowStr = new Date().toLocaleString([], {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+
+        const learnedWordsDetailed = [];
+        learnedWordIds.forEach(function(id) {
+          const item = VOCAB_BY_ID.get(Number(id));
+          if (item) {
+            learnedWordsDetailed.push(item);
+          }
+        });
+        learnedWordsDetailed.sort(function(a, b) { return a.id - b.id; });
+
+        const hardWordsDetailed = [];
+        hardWordIds.forEach(function(id) {
+          const item = VOCAB_BY_ID.get(Number(id));
+          if (item) {
+            hardWordsDetailed.push(item);
+          }
+        });
+
+        const totalVocab = VOCAB.length;
+        const learnedCount = learnedWordsDetailed.length;
+        const learnedPct = totalVocab > 0 ? Math.round((learnedCount / totalVocab) * 100) : 0;
+        const studiedCount = Math.max(studiedWordIds.size, learnedCount);
+        const studiedPct = totalVocab > 0 ? Math.round((studiedCount / totalVocab) * 100) : 0;
+
+        let totalQuizCorrect = 0;
+        let totalQuizQuestions = 0;
+        quizHistory.forEach(function(q) {
+          totalQuizCorrect += Number(q.score) || 0;
+          totalQuizQuestions += Number(q.total) || 0;
+        });
+        const quizAccuracyPct = totalQuizQuestions > 0 ? Math.round((totalQuizCorrect / totalQuizQuestions) * 100) : 0;
+
+        const levelStats = ["A1", "A2", "B1"].map(function(lv) {
+          const pool = VOCAB.filter(function(w) { return w.level === lv; });
+          const lvLearned = pool.filter(function(w) { return learnedWordIds.has(w.id); }).length;
+          const lvStudied = pool.filter(function(w) { return studiedWordIds.has(w.id) || learnedWordIds.has(w.id); }).length;
+          const pct = pool.length > 0 ? Math.round((lvLearned / pool.length) * 100) : 0;
+          return {
+            level: lv,
+            total: pool.length,
+            learned: lvLearned,
+            studied: lvStudied,
+            pct: pct
+          };
+        });
+
+        const completedDates = Object.keys(streakState.completedDays || {}).sort();
+        const goalCompletedToday = Boolean(streakState.completedDays && streakState.completedDays[today]);
+
+        // Pagination setup for A4 canvas (1240 x 1754 px)
+        const PAGE_W = 1240;
+        const PAGE_H = 1754;
+        const MARGIN_X = 64;
+        const CONTENT_W = PAGE_W - MARGIN_X * 2;
+        const FIRST_PAGE_ROWS = 14;
+        const NEXT_PAGE_ROWS = 25;
+
+        const wordChunks = [];
+        if (learnedWordsDetailed.length <= FIRST_PAGE_ROWS) {
+          wordChunks.push(learnedWordsDetailed);
+        } else {
+          wordChunks.push(learnedWordsDetailed.slice(0, FIRST_PAGE_ROWS));
+          let idx = FIRST_PAGE_ROWS;
+          while (idx < learnedWordsDetailed.length) {
+            wordChunks.push(learnedWordsDetailed.slice(idx, idx + NEXT_PAGE_ROWS));
+            idx += NEXT_PAGE_ROWS;
+          }
+        }
+
+        const totalPages = wordChunks.length;
+        const logoImgEl = document.querySelector(".khansoft-logo-img");
+        const canDrawLogo = Boolean(logoImgEl && logoImgEl.complete && logoImgEl.naturalWidth > 0);
+        const fontSans = "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+
+        function drawPageHeader(ctx, pageNum) {
+          // Top banner background
+          drawRoundedRect(ctx, MARGIN_X, 48, CONTENT_W, 114, 16, "#0F172A", "#1E293B");
+          let textStartX = MARGIN_X + 28;
+          if (canDrawLogo) {
+            try {
+              drawRoundedRect(ctx, MARGIN_X + 24, 67, 76, 76, 12, "#FFFFFF", null);
+              ctx.drawImage(logoImgEl, MARGIN_X + 28, 71, 68, 68);
+              textStartX = MARGIN_X + 118;
+            } catch (e) {}
+          }
+          ctx.fillStyle = "#38BDF8";
+          ctx.font = "800 18px " + fontSans;
+          ctx.fillText("KHANSOFT · OFFICIAL LEARNING PROGRESS REPORT", textStartX, 88);
+
+          ctx.fillStyle = "#FFFFFF";
+          ctx.font = "800 30px " + fontSans;
+          ctx.fillText("German vocabulary A1 to B1", textStartX, 124);
+
+          ctx.fillStyle = "#94A3B8";
+          ctx.font = "600 15px " + fontSans;
+          ctx.fillText("Goethe-Zertifikat · Telc · Start Deutsch Curriculum (2,731 Words)", textStartX, 147);
+
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#E2E8F0";
+          ctx.font = "700 16px " + fontSans;
+          ctx.fillText("Exported: " + nowStr, PAGE_W - MARGIN_X - 26, 96);
+          ctx.fillStyle = "#38BDF8";
+          ctx.font = "700 15px " + fontSans;
+          ctx.fillText("Page " + pageNum + " of " + totalPages, PAGE_W - MARGIN_X - 26, 124);
+          ctx.textAlign = "left";
+        }
+
+        function drawPageFooter(ctx, pageNum) {
+          const footerY = PAGE_H - 48;
+          ctx.strokeStyle = "#CBD5E1";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(MARGIN_X, footerY - 24);
+          ctx.lineTo(PAGE_W - MARGIN_X, footerY - 24);
+          ctx.stroke();
+
+          ctx.fillStyle = "#64748B";
+          ctx.font = "600 14px " + fontSans;
+          ctx.fillText("KhanSoft · German vocabulary A1 to B1 · Offline Self-Contained Progress Report", MARGIN_X, footerY);
+
+          ctx.textAlign = "right";
+          ctx.fillText("Page " + pageNum + " of " + totalPages, PAGE_W - MARGIN_X, footerY);
+          ctx.textAlign = "left";
+        }
+
+        function drawWordsTable(ctx, rows, startY, startIndexOffset) {
+          let y = startY;
+          // Section Heading
+          ctx.fillStyle = "#0F172A";
+          ctx.font = "800 22px " + fontSans;
+          ctx.fillText(
+            startIndexOffset === 0
+              ? "Learned Vocabulary Words (" + learnedCount + " Total Mastered)"
+              : "Learned Vocabulary Words (Continued — " + (startIndexOffset + 1) + " to " + (startIndexOffset + rows.length) + " of " + learnedCount + ")",
+            MARGIN_X,
+            y
+          );
+          y += 16;
+
+          // Table Header
+          const tableH = 44;
+          drawRoundedRect(ctx, MARGIN_X, y, CONTENT_W, tableH, 10, "#1E293B", null);
+          ctx.fillStyle = "#F8FAFC";
+          ctx.font = "700 15px " + fontSans;
+          const colIdX = MARGIN_X + 16;
+          const colLvX = MARGIN_X + 82;
+          const colDeX = MARGIN_X + 275;
+          const colEnX = MARGIN_X + 565;
+          const colExX = MARGIN_X + 835;
+
+          ctx.fillText("#ID", colIdX, y + 28);
+          ctx.fillText("Level & Lesson", colLvX, y + 28);
+          ctx.fillText("German Word (Gender)", colDeX, y + 28);
+          ctx.fillText("English & বাংলা Meaning", colEnX, y + 28);
+          ctx.fillText("Example Sentence", colExX, y + 28);
+          y += tableH + 6;
+
+          if (rows.length === 0) {
+            drawRoundedRect(ctx, MARGIN_X, y, CONTENT_W, 110, 12, "#F8FAFC", "#CBD5E1");
+            ctx.fillStyle = "#334155";
+            ctx.font = "700 18px " + fontSans;
+            ctx.fillText("No vocabulary words marked as learned yet.", MARGIN_X + 24, y + 46);
+            ctx.fillStyle = "#64748B";
+            ctx.font = "500 15px " + fontSans;
+            ctx.fillText("Mark words as learned in Flashcard Mode, Words & Sentences Explorer, or score correct answers in Quiz Mode.", MARGIN_X + 24, y + 76);
+            return;
+          }
+
+          const rowH = 52;
+          rows.forEach(function(item, idx) {
+            const bg = idx % 2 === 0 ? "#F8FAFC" : "#FFFFFF";
+            drawRoundedRect(ctx, MARGIN_X, y, CONTENT_W, rowH - 4, 8, bg, "#E2E8F0");
+
+            // #ID
+            ctx.fillStyle = "#475569";
+            ctx.font = "700 14px " + fontSans;
+            ctx.fillText("#" + item.id, colIdX, y + 30);
+
+            // Level badge + Lesson
+            const lvColor = item.level === "A1" ? "#0284C7" : item.level === "A2" ? "#0D9488" : "#4F46E5";
+            drawRoundedRect(ctx, colLvX, y + 11, 38, 26, 6, lvColor, null);
+            ctx.fillStyle = "#FFFFFF";
+            ctx.font = "800 13px " + fontSans;
+            ctx.fillText(item.level, colLvX + 9, y + 29);
+
+            ctx.fillStyle = "#334155";
+            ctx.font = "600 14px " + fontSans;
+            ctx.fillText(truncateCanvasText(ctx, item.catName, 138), colLvX + 46, y + 29);
+
+            // German word + gender
+            ctx.fillStyle = "#0F172A";
+            ctx.font = "800 16px " + fontSans;
+            ctx.fillText(truncateCanvasText(ctx, item.de, 275), colDeX, y + 23);
+            ctx.fillStyle = "#64748B";
+            ctx.font = "600 12px " + fontSans;
+            ctx.fillText(truncateCanvasText(ctx, item.genderLabel || "", 275), colDeX, y + 41);
+
+            // English + Bengali meaning
+            ctx.fillStyle = "#0F172A";
+            ctx.font = "700 15px " + fontSans;
+            ctx.fillText(truncateCanvasText(ctx, item.en, 255), colEnX, y + 23);
+            if (item.bn) {
+              ctx.fillStyle = "#0284C7";
+              ctx.font = "600 13px " + fontSans;
+              ctx.fillText(truncateCanvasText(ctx, item.bn, 255), colEnX, y + 41);
+            }
+
+            // Example sentence
+            ctx.fillStyle = "#334155";
+            ctx.font = "600 13px " + fontSans;
+            ctx.fillText(truncateCanvasText(ctx, item.exDe || "", 325), colExX, y + 23);
+            ctx.fillStyle = "#64748B";
+            ctx.font = "500 12px " + fontSans;
+            ctx.fillText(truncateCanvasText(ctx, item.exEn || "", 325), colExX, y + 41);
+
+            y += rowH;
+          });
+        }
+
+        const jpegPages = [];
+
+        for (let p = 0; p < totalPages; p++) {
+          const canvas = document.createElement("canvas");
+          canvas.width = PAGE_W;
+          canvas.height = PAGE_H;
+          const ctx = canvas.getContext("2d");
+
+          // Clean white page background
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(0, 0, PAGE_W, PAGE_H);
+
+          drawPageHeader(ctx, p + 1);
+
+          if (p === 0) {
+            // Page 1: KPI Summary Cards + Streak & CEFR Mastery + First Table Page
+            let curY = 186;
+
+            // 4 KPI Cards Row
+            const cardGap = 18;
+            const cardW = (CONTENT_W - cardGap * 3) / 4;
+            const cardH = 128;
+
+            const kpis = [
+              {
+                label: "WORDS LEARNED",
+                badge: learnedPct + "%",
+                value: learnedCount + " / " + totalVocab,
+                sub: "Mastered across A1–B1",
+                accent: "#0D9488"
+              },
+              {
+                label: "DAILY STUDY STREAK",
+                badge: "Best: " + streakState.bestStreak + "d",
+                value: streakState.currentStreak + " Days",
+                sub: goalCompletedToday ? "Today's 15m Goal Complete" : "Today: " + formatMMSS(streakState.todaySeconds) + " / 15:00",
+                accent: "#EA580C"
+              },
+              {
+                label: "WORDS STUDIED",
+                badge: studiedPct + "%",
+                value: studiedCount + " / " + totalVocab,
+                sub: hardWordsDetailed.length + " Hard Words Marked",
+                accent: "#0284C7"
+              },
+              {
+                label: "QUIZ ACCURACY",
+                badge: quizHistory.length + " Quizzes",
+                value: quizAccuracyPct + "%",
+                sub: totalQuizCorrect + " / " + totalQuizQuestions + " Correct Answers",
+                accent: "#4F46E5"
+              }
+            ];
+
+            kpis.forEach(function(k, idx) {
+              const cx = MARGIN_X + idx * (cardW + cardGap);
+              drawRoundedRect(ctx, cx, curY, cardW, cardH, 14, "#F8FAFC", "#CBD5E1");
+              // Top accent bar
+              drawRoundedRect(ctx, cx, curY, cardW, 7, 4, k.accent, null);
+
+              ctx.fillStyle = "#475569";
+              ctx.font = "800 13px " + fontSans;
+              ctx.fillText(k.label, cx + 18, curY + 34);
+
+              ctx.textAlign = "right";
+              ctx.fillStyle = k.accent;
+              ctx.font = "800 13px " + fontSans;
+              ctx.fillText(k.badge, cx + cardW - 18, curY + 34);
+              ctx.textAlign = "left";
+
+              ctx.fillStyle = "#0F172A";
+              ctx.font = "800 28px " + fontSans;
+              ctx.fillText(k.value, cx + 18, curY + 76);
+
+              ctx.fillStyle = "#64748B";
+              ctx.font = "600 13px " + fontSans;
+              ctx.fillText(truncateCanvasText(ctx, k.sub, cardW - 32), cx + 18, curY + 106);
+            });
+
+            curY += cardH + 22;
+
+            // Two-Column Box: Left = Streak Details, Right = CEFR Level Breakdown
+            const boxGap = 22;
+            const boxW = (CONTENT_W - boxGap) / 2;
+            const boxH = 192;
+
+            // Left Box: Daily Streak & Study Activity
+            drawRoundedRect(ctx, MARGIN_X, curY, boxW, boxH, 14, "#F8FAFC", "#CBD5E1");
+            ctx.fillStyle = "#0F172A";
+            ctx.font = "800 19px " + fontSans;
+            ctx.fillText("Daily Study Streak & 15-Minute Goal", MARGIN_X + 22, curY + 36);
+
+            const streakLines = [
+              ["Current Active Streak:", streakState.currentStreak + " Days (Best: " + streakState.bestStreak + " Days)"],
+              ["Today's Study Timer:", formatMMSS(streakState.todaySeconds) + " / 15:00 (" + Math.min(100, Math.round((streakState.todaySeconds / DAILY_GOAL_SECONDS) * 100)) + "%)"],
+              ["Today's Practice Actions:", (streakState.todayActions || 0) + " Cards / Answers Reviewed"],
+              ["Completed Goal Dates:", completedDates.length > 0 ? completedDates.slice(-5).join(", ") : "None recorded yet"]
+            ];
+
+            streakLines.forEach(function(pair, i) {
+              const ly = curY + 72 + i * 31;
+              ctx.fillStyle = "#475569";
+              ctx.font = "600 14px " + fontSans;
+              ctx.fillText(pair[0], MARGIN_X + 22, ly);
+
+              ctx.textAlign = "right";
+              ctx.fillStyle = "#0F172A";
+              ctx.font = "700 14px " + fontSans;
+              ctx.fillText(truncateCanvasText(ctx, pair[1], 295), MARGIN_X + boxW - 22, ly);
+              ctx.textAlign = "left";
+            });
+
+            // Right Box: CEFR Level Mastery (A1, A2, B1)
+            const rightBoxX = MARGIN_X + boxW + boxGap;
+            drawRoundedRect(ctx, rightBoxX, curY, boxW, boxH, 14, "#F8FAFC", "#CBD5E1");
+            ctx.fillStyle = "#0F172A";
+            ctx.font = "800 19px " + fontSans;
+            ctx.fillText("Mastery by CEFR Level (A1 · A2 · B1)", rightBoxX + 22, curY + 36);
+
+            levelStats.forEach(function(st, idx) {
+              const ry = curY + 68 + idx * 42;
+              const lvAccent = st.level === "A1" ? "#0284C7" : st.level === "A2" ? "#0D9488" : "#4F46E5";
+
+              ctx.fillStyle = "#0F172A";
+              ctx.font = "800 15px " + fontSans;
+              ctx.fillText("CEFR " + st.level, rightBoxX + 22, ry);
+
+              ctx.textAlign = "right";
+              ctx.fillStyle = "#334155";
+              ctx.font = "700 14px " + fontSans;
+              ctx.fillText(st.learned + " / " + st.total + " learned (" + st.pct + "%)", rightBoxX + boxW - 22, ry);
+              ctx.textAlign = "left";
+
+              // Progress Track
+              const barX = rightBoxX + 22;
+              const barY = ry + 8;
+              const barW = boxW - 44;
+              drawRoundedRect(ctx, barX, barY, barW, 10, 5, "#E2E8F0", null);
+              const fillW = Math.max(0, Math.min(barW, Math.round((st.pct / 100) * barW)));
+              if (fillW > 0) {
+                drawRoundedRect(ctx, barX, barY, Math.max(10, fillW), 10, 5, lvAccent, null);
+              }
+            });
+
+            curY += boxH + 34;
+            drawWordsTable(ctx, wordChunks[0], curY, 0);
+          } else {
+            const offset = FIRST_PAGE_ROWS + (p - 1) * NEXT_PAGE_ROWS;
+            drawWordsTable(ctx, wordChunks[p], 198, offset);
+          }
+
+          drawPageFooter(ctx, p + 1);
+
+          jpegPages.push({
+            dataUrl: canvas.toDataURL("image/jpeg", 0.92),
+            width: PAGE_W,
+            height: PAGE_H
+          });
+        }
+
+        // Standard A4 dimensions in PDF points: 595.28 x 841.89
+        const pdfBlob = buildPdfFromJpegPages(jpegPages, 595.28, 841.89);
+        const url = URL.createObjectURL(pdfBlob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "khansoft-german-a1-b1-progress-" + today + ".pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(function() {
+          try { URL.revokeObjectURL(url); } catch (e) {}
+        }, 1800);
+
+        if (triggerBtnLabelId) {
+          const labelEl = document.getElementById(triggerBtnLabelId);
+          if (labelEl) {
+            const originalText = labelEl.textContent;
+            labelEl.textContent = "✓ Exported PDF";
+            setTimeout(function() {
+              labelEl.textContent = originalText;
+            }, 2200);
+          }
+        }
+      }
+
+      document.getElementById("progExportJsonBtn").addEventListener("click", function() {
+        exportUserProgressPdf("progExportJsonBtnLabel");
+      });
+
+      document.getElementById("streakModalExportJsonBtn").addEventListener("click", function() {
+        exportUserProgressPdf("streakModalExportBtnLabel");
       });
 
       document.getElementById("progOpenStreakModalBtn").addEventListener("click", openStreakModal);
