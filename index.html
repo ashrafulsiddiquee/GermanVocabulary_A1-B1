@@ -7,7 +7,9 @@
   <meta name="description" content="Complete interactive German vocabulary A1 to B1 learning web application (2,731 words across A1, A2, and B1) with 3D flashcards, English & Bengali meanings, audio pronunciation, grammar details, quiz mode, and progress tracking." />
   <meta name="keywords" content="German vocabulary A1 to B1, Deutsch A1 A2 B1 Wortschatz, German Flashcards, German Quiz, German to English Bengali Vocabulary" />
   <meta name="author" content="Md Ashraful Hakim Khan Siddiquee · KhanSoft" />
-  <link rel="icon" type="image/png" href="img/khanSoft.png" />
+  <link id="siteFavicon" rel="icon" type="image/png" href="img/khanSoft.png?v=3" />
+  <link id="siteShortcutIcon" rel="shortcut icon" type="image/png" href="img/khanSoft.png?v=3" />
+  <link id="siteAppleTouchIcon" rel="apple-touch-icon" href="img/khanSoft.png?v=3" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="German vocabulary A1 to B1 | KhanSoft" />
   <meta property="og:description" content="Complete interactive German vocabulary A1 to B1 learning web application by KhanSoft (2,731 words across A1, A2, and B1) with 3D flashcards, English & Bengali meanings, audio pronunciation, grammar details, quiz mode, and progress tracking." />
@@ -210,8 +212,10 @@
       display: block;
       object-fit: contain;
       flex-shrink: 0;
+      background-color: #FFFFFF;
+      padding: 2px 5px;
       border-radius: 0.45rem;
-      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16);
       transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
@@ -245,8 +249,10 @@
       display: block;
       object-fit: contain;
       flex-shrink: 0;
+      background-color: #FFFFFF;
+      padding: 2px 4px;
       border-radius: 0.4rem;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.16);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.14);
     }
 
     .primary-nav {
@@ -2405,10 +2411,11 @@
       <div class="top-header-row-1">
         <a href="#home" class="brand-wordmark" id="brandHomeLink" aria-label="KhanSoft — German vocabulary A1 to B1 Home">
           <img
+            id="headerBrandLogoImg"
             src="img/khanSoft.png"
             alt="KhanSoft Logo"
             class="khansoft-logo-img"
-            onerror="if(!this.dataset.f1){this.dataset.f1='1';this.src='img/khansoft.png';}else if(!this.dataset.f2){this.dataset.f2='1';this.src='img/logo.png';}else if(!this.dataset.f3){this.dataset.f3='1';this.src='/assets/aistudio/khanSoft_9409cc3a.png';}"
+            onerror="if(!this.dataset.f1){this.dataset.f1='1';this.src='img/khansoft.png';}else if(!this.dataset.f2){this.dataset.f2='1';this.src='img/KhanSoft.png';}else if(!this.dataset.f3){this.dataset.f3='1';this.src='img/logo.png';}"
           />
           <span><span class="khansoft-brand-primary">KhanSoft</span> <span class="khansoft-brand-divider">·</span> German vocabulary A1 to B1</span>
         </a>
@@ -2483,7 +2490,7 @@
                     src="img/khanSoft.png"
                     alt="KhanSoft Logo"
                     class="khansoft-hero-logo-img"
-                    onerror="if(!this.dataset.f1){this.dataset.f1='1';this.src='img/khansoft.png';}else if(!this.dataset.f2){this.dataset.f2='1';this.src='img/logo.png';}else if(!this.dataset.f3){this.dataset.f3='1';this.src='/assets/aistudio/khanSoft_9409cc3a.png';}"
+                    onerror="if(!this.dataset.f1){this.dataset.f1='1';this.src='img/khansoft.png';}else if(!this.dataset.f2){this.dataset.f2='1';this.src='img/KhanSoft.png';}else if(!this.dataset.f3){this.dataset.f3='1';this.src='img/logo.png';}"
                   />
                   <span style="font-family: var(--font-display); font-size: 0.875rem; font-weight: 800; color: var(--accent-primary); letter-spacing: -0.01em;">KhanSoft</span>
                   <span aria-hidden="true" style="color: var(--text-muted);">·</span>
@@ -3479,7 +3486,7 @@
             src="img/khanSoft.png"
             alt="KhanSoft Logo"
             class="khansoft-hero-logo-img"
-            onerror="if(!this.dataset.f1){this.dataset.f1='1';this.src='img/khansoft.png';}else if(!this.dataset.f2){this.dataset.f2='1';this.src='img/logo.png';}else if(!this.dataset.f3){this.dataset.f3='1';this.src='/assets/aistudio/khanSoft_9409cc3a.png';}"
+            onerror="if(!this.dataset.f1){this.dataset.f1='1';this.src='img/khansoft.png';}else if(!this.dataset.f2){this.dataset.f2='1';this.src='img/KhanSoft.png';}else if(!this.dataset.f3){this.dataset.f3='1';this.src='img/logo.png';}"
           />
           <strong style="font-family: var(--font-display); color: var(--text-primary);">KhanSoft</strong>
         </span>
@@ -7407,6 +7414,126 @@
           switchMode(btn.getAttribute("data-bento-mode"));
         });
       });
+
+      // Dynamically sync the browser Title Bar (Tab Favicon) from the loaded /img folder logo
+      function applyFaviconHref(hrefUrl) {
+        if (!hrefUrl) return;
+        const head = document.head || document.getElementsByTagName("head")[0];
+        if (!head) return;
+        const existingIcons = head.querySelectorAll("link[rel*='icon']");
+        existingIcons.forEach(function(node) {
+          if (node.parentNode) node.parentNode.removeChild(node);
+        });
+        ["icon", "shortcut icon", "apple-touch-icon"].forEach(function(relVal) {
+          const link = document.createElement("link");
+          link.rel = relVal;
+          link.type = "image/png";
+          link.href = hrefUrl;
+          head.appendChild(link);
+        });
+      }
+
+      function syncTitleBarFaviconFromImg(imgEl) {
+        if (!imgEl || !imgEl.complete || !imgEl.naturalWidth) return;
+        try {
+          const size = 128;
+          const canvas = document.createElement("canvas");
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext("2d");
+
+          // Draw a clean white rounded-square badge for the browser title bar icon
+          drawRoundedRect(ctx, 0, 0, size, size, 24, "#FFFFFF", "#E2E8F0");
+
+          // Inspect source image on an offscreen canvas so if a dark-background image is in /img,
+          // it is normalized to a clean white background for the title bar icon
+          const srcW = imgEl.naturalWidth;
+          const srcH = imgEl.naturalHeight;
+          const tmpCanvas = document.createElement("canvas");
+          tmpCanvas.width = srcW;
+          tmpCanvas.height = srcH;
+          const tmpCtx = tmpCanvas.getContext("2d");
+          tmpCtx.drawImage(imgEl, 0, 0);
+
+          let cropX = 0;
+          let cropY = 0;
+          let cropW = srcW;
+          let cropH = srcH;
+
+          try {
+            const imgData = tmpCtx.getImageData(0, 0, srcW, srcH);
+            const d = imgData.data;
+            // Check corner pixel (top-left) to see if background is dark navy
+            const cR = d[0], cG = d[1], cB = d[2], cA = d[3];
+            const isDarkBg = cA > 180 && cR < 55 && cG < 75 && cB < 120;
+            if (isDarkBg) {
+              for (let i = 0; i < d.length; i += 4) {
+                const r = d[i], g = d[i + 1], b = d[i + 2];
+                const isGold = (r - b > 35) && (r > 85);
+                const isSkyBlue = (b - r > 45) && (b > 115) && (g > 90);
+                if (!isGold && !isSkyBlue) {
+                  const t = Math.max(0, Math.min(1, (g - 40) / (255 - 40)));
+                  const inv = 1 - t;
+                  d[i]     = Math.round(19 + inv * (255 - 19));
+                  d[i + 1] = Math.round(40 + inv * (255 - 40));
+                  d[i + 2] = Math.round(71 + inv * (255 - 71));
+                }
+              }
+              tmpCtx.putImageData(imgData, 0, 0);
+            }
+
+            // Find tight bounding box of non-white logo content so the icon fills the 128x128 tab badge
+            let minX = srcW, minY = srcH, maxX = 0, maxY = 0;
+            const step = Math.max(1, Math.floor(Math.min(srcW, srcH) / 160));
+            for (let y = 0; y < srcH; y += step) {
+              for (let x = 0; x < srcW; x += step) {
+                const idx = (y * srcW + x) * 4;
+                const r = d[idx], g = d[idx + 1], b = d[idx + 2], a = d[idx + 3];
+                if (a > 25 && (r < 242 || g < 242 || b < 242)) {
+                  if (x < minX) minX = x;
+                  if (y < minY) minY = y;
+                  if (x > maxX) maxX = x;
+                  if (y > maxY) maxY = y;
+                }
+              }
+            }
+            if (maxX > minX && maxY > minY) {
+              const padX = Math.round((maxX - minX) * 0.08);
+              const padY = Math.round((maxY - minY) * 0.08);
+              cropX = Math.max(0, minX - padX);
+              cropY = Math.max(0, minY - padY);
+              cropW = Math.min(srcW - cropX, (maxX - minX) + padX * 2);
+              cropH = Math.min(srcH - cropY, (maxY - minY) + padY * 2);
+            }
+          } catch (pixelErr) {}
+
+          const padding = 12;
+          const availW = size - padding * 2;
+          const availH = size - padding * 2;
+          const scale = Math.min(availW / cropW, availH / cropH);
+          const drawW = Math.round(cropW * scale);
+          const drawH = Math.round(cropH * scale);
+          const drawX = Math.round((size - drawW) / 2);
+          const drawY = Math.round((size - drawH) / 2);
+
+          ctx.drawImage(tmpCanvas, cropX, cropY, cropW, cropH, drawX, drawY, drawW, drawH);
+          const dataUrl = canvas.toDataURL("image/png");
+          applyFaviconHref(dataUrl);
+        } catch (err) {
+          const fallbackSrc = (imgEl.currentSrc || imgEl.src || "img/khanSoft.png").split("?")[0] + "?v=" + Date.now();
+          applyFaviconHref(fallbackSrc);
+        }
+      }
+
+      const headerLogoImgEl = document.getElementById("headerBrandLogoImg");
+      if (headerLogoImgEl) {
+        headerLogoImgEl.addEventListener("load", function() {
+          syncTitleBarFaviconFromImg(headerLogoImgEl);
+        });
+        if (headerLogoImgEl.complete && headerLogoImgEl.naturalWidth > 0) {
+          syncTitleBarFaviconFromImg(headerLogoImgEl);
+        }
+      }
 
       // Initialize App
       initTheme();
