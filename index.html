@@ -2089,6 +2089,231 @@
         padding: 1.25rem;
       }
     }
+
+    /* ==========================================
+       SPEAKING PRACTICE MODULE (FLASHCARD MODE)
+       ========================================== */
+    .speaking-practice-card {
+      display: none;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 0.875rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow-card);
+      flex-direction: column;
+      gap: 1.1rem;
+      animation: fadeSlideIn 180ms ease-out;
+    }
+
+    .speaking-practice-card.open {
+      display: flex;
+    }
+
+    .speaking-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .speaking-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .speaking-title {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .speaking-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.375rem;
+      background-color: var(--bg-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .speaking-status-badge.status-recording {
+      background-color: var(--semantic-error-bg);
+      color: var(--semantic-error);
+      border-color: var(--semantic-error);
+    }
+
+    .speaking-status-badge.status-comparing {
+      background-color: var(--accent-soft);
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+    }
+
+    .speaking-status-badge.status-ready {
+      background-color: var(--semantic-success-bg);
+      color: var(--semantic-success);
+      border-color: var(--semantic-success);
+    }
+
+    .speaking-target-banner {
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.625rem;
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .speaking-target-de {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .speaking-target-meaning {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 0.15rem;
+    }
+
+    .speaking-comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 720px) {
+      .speaking-comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .speaking-col-card {
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.75rem;
+      padding: 1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.85rem;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .speaking-col-card.active-playing {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 2px var(--accent-soft);
+    }
+
+    .speaking-col-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .speaking-waveform-box {
+      position: relative;
+      height: 56px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .speaking-waveform-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .btn-record-voice.is-recording {
+      background-color: var(--semantic-error);
+      border-color: var(--semantic-error);
+      color: #FFFFFF;
+      animation: recordPulse 1.25s infinite ease-in-out;
+    }
+
+    @keyframes recordPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.78; }
+    }
+
+    .speaking-compare-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding: 0.85rem 1rem;
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.625rem;
+    }
+
+    .speaking-feedback-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .pronunciation-score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 0.375rem;
+      border: 1px solid var(--border-strong);
+      background-color: var(--bg-surface);
+      color: var(--text-primary);
+    }
+
+    .pronunciation-score-badge.score-high {
+      background-color: var(--semantic-success-bg);
+      border-color: var(--semantic-success);
+      color: var(--semantic-success);
+    }
+
+    .pronunciation-score-badge.score-mid {
+      background-color: var(--Hard-amber-bg);
+      border-color: var(--Hard-amber-border);
+      color: var(--Hard-amber);
+    }
+
+    .pronunciation-score-badge.score-low {
+      background-color: var(--semantic-error-bg);
+      border-color: var(--semantic-error);
+      color: var(--semantic-error);
+    }
   </style>
 </head>
 <body>
@@ -2667,6 +2892,10 @@
               <button type="button" class="btn btn-primary" id="fcNextBtn">Next →</button>
             </div>
             <div class="control-group">
+              <button type="button" class="btn" id="fcToggleSpeakingBtn" aria-expanded="false">
+                <span aria-hidden="true">🎙</span>
+                <span id="fcSpeakingBtnLabel">Speaking Practice</span>
+              </button>
               <button type="button" class="btn" id="fcToggleDetailsBtn" aria-expanded="false">
                 <span id="fcDetailsBtnIcon" aria-hidden="true">▾</span>
                 <span id="fcDetailsBtnLabel">Show Details</span>
@@ -2679,6 +2908,89 @@
               <button type="button" class="btn btn-star" id="fcMarkHardMainBtn">
                 <span id="fcMainStarIcon" aria-hidden="true">☆</span>
                 <span id="fcMainStarLabel">Mark as Hard</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Flashcard Expandable Speaking Practice & Pronunciation Comparison Module -->
+          <div class="speaking-practice-card" id="fcSpeakingPracticePanel" role="region" aria-label="Speaking Practice and Pronunciation Comparison">
+            <div class="speaking-header">
+              <div class="speaking-title-group">
+                <span aria-hidden="true">🎙</span>
+                <h3 class="speaking-title">Speaking Practice &amp; Pronunciation Comparison</h3>
+                <span class="speaking-status-badge tabular-nums" id="fcSpeakingStatusBadge">Ready to Record</span>
+              </div>
+              <div class="segmented-filter" role="group" aria-label="Select pronunciation target">
+                <button type="button" class="seg-btn active" id="fcSpeakTargetWordBtn" data-speak-target="word">German Word</button>
+                <button type="button" class="seg-btn" id="fcSpeakTargetSentBtn" data-speak-target="sentence">Example Sentence</button>
+              </div>
+            </div>
+
+            <div class="speaking-target-banner">
+              <div>
+                <div class="meta-inline" id="fcSpeakingTargetMeta">Target German Pronunciation · Press R to Record</div>
+                <div class="speaking-target-de" id="fcSpeakingTargetText">ansehen</div>
+                <div class="speaking-target-meaning" id="fcSpeakingTargetMeaning">to look at / watch · বাংলা: দেখা / তাকানো</div>
+              </div>
+              <div class="meta-inline tabular-nums" id="fcSpeakingSyllableHint">Syllable guide: an·sehen</div>
+            </div>
+
+            <div class="speaking-comparison-grid">
+              <!-- Column 1: Speech Synthesis API Reference Output -->
+              <div class="speaking-col-card" id="fcSpeakingRefCol">
+                <div>
+                  <div class="speaking-col-header">
+                    <span>1 · Speech Synthesis API (Reference)</span>
+                    <span class="tabular-nums" id="fcSpeakingVoiceName">de-DE Native</span>
+                  </div>
+                  <p style="font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.45rem;">
+                    Listen to the reference German Speech Synthesis output at normal conversational speed or slow articulation speed.
+                  </p>
+                </div>
+                <div class="control-group">
+                  <button type="button" class="btn" id="fcSpeakRefNormalBtn">
+                    <span aria-hidden="true">🔊</span>
+                    <span>Reference (1.0x)</span>
+                  </button>
+                  <button type="button" class="btn" id="fcSpeakRefSlowBtn">
+                    <span aria-hidden="true">🐢</span>
+                    <span>Slow (0.65x)</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Column 2: User Voice Recorder & Waveform -->
+              <div class="speaking-col-card" id="fcSpeakingUserCol">
+                <div>
+                  <div class="speaking-col-header">
+                    <span>2 · Your Voice Recording</span>
+                    <span class="tabular-nums" id="fcSpeakingTimerText">00:00.0</span>
+                  </div>
+                  <div class="speaking-waveform-box" style="margin-top: 0.45rem;">
+                    <canvas id="fcSpeakingWaveform" class="speaking-waveform-canvas" width="380" height="56"></canvas>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <button type="button" class="btn btn-primary btn-record-voice" id="fcRecordToggleBtn">
+                    <span id="fcRecordBtnIcon" aria-hidden="true">🎙</span>
+                    <span id="fcRecordBtnLabel">Record My Voice</span>
+                  </button>
+                  <button type="button" class="btn" id="fcPlayUserAudioBtn" disabled>
+                    <span aria-hidden="true">▶</span>
+                    <span>Hear My Voice</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Side-by-Side Comparison & Speech Recognition Feedback -->
+            <div class="speaking-compare-bar">
+              <div class="speaking-feedback-row" id="fcSpeakingFeedbackBox">
+                <span>Record your pronunciation above, then play back or compare directly against the Speech Synthesis API.</span>
+              </div>
+              <button type="button" class="btn btn-primary" id="fcCompareBothBtn" disabled>
+                <span aria-hidden="true">⇄</span>
+                <span>Compare Both (Speech Synthesis → Yours)</span>
               </button>
             </div>
           </div>
@@ -2718,6 +3030,7 @@
           <ul class="shortcut-list" aria-label="Keyboard Shortcuts">
             <li class="shortcut-item"><span>Flip Card</span><kbd>Space</kbd></li>
             <li class="shortcut-item"><span>Previous / Next</span><kbd>← / →</kbd></li>
+            <li class="shortcut-item"><span>Speaking Practice</span><kbd>R</kbd></li>
             <li class="shortcut-item"><span>Show / Hide Details</span><kbd>D</kbd></li>
             <li class="shortcut-item"><span>Pronounce German</span><kbd>P</kbd></li>
             <li class="shortcut-item"><span>Toggle Learned Status</span><kbd>L</kbd></li>
@@ -3367,8 +3680,11 @@
       }
 
       // Speech Synthesis API (German pronunciation)
-      function speakGerman(text, customRate) {
-        if (!("speechSynthesis" in window) || !text) return;
+      function speakGerman(text, customRate, onEndCallback) {
+        if (!("speechSynthesis" in window) || !text) {
+          if (typeof onEndCallback === "function") onEndCallback();
+          return;
+        }
         try {
           window.speechSynthesis.cancel();
           const utterance = new SpeechSynthesisUtterance(text);
@@ -3381,9 +3697,21 @@
           if (deVoice) {
             utterance.voice = deVoice;
           }
+          let callbackFired = false;
+          function done() {
+            if (callbackFired) return;
+            callbackFired = true;
+            if (typeof onEndCallback === "function") onEndCallback();
+          }
+          if (typeof onEndCallback === "function") {
+            utterance.onend = done;
+            utterance.onerror = done;
+            const estMs = Math.max(1600, Math.min(9000, text.length * 110));
+            setTimeout(done, estMs);
+          }
           window.speechSynthesis.speak(utterance);
         } catch (e) {
-          // Speech synthesis fallback no-op
+          if (typeof onEndCallback === "function") onEndCallback();
         }
       }
 
@@ -3436,6 +3764,9 @@
 
       function switchMode(targetMode) {
         if (!modeSections[targetMode]) return;
+        if (targetMode !== "flashcards" && typeof stopSpeakingPracticeRecording === "function") {
+          stopSpeakingPracticeRecording(true);
+        }
         currentMode = targetMode;
         navButtons.forEach(function(btn) {
           btn.classList.toggle("active", btn.getAttribute("data-mode") === targetMode);
@@ -4220,8 +4551,462 @@
       let fcIndex = 0;
       let fcFlipped = false;
       let fcDetailsOpen = false;
+      let fcSpeakingOpen = false;
+      let fcSpeakingTargetMode = "word"; // "word" | "sentence"
+
+      // Speaking Practice Recorder & Audio Comparison State
+      let spMediaRecorder = null;
+      let spMediaStream = null;
+      let spAudioChunks = [];
+      let spRecordedBlobUrl = null;
+      let spRecordedCardKey = "";
+      let spUserAudioEl = null;
+      let spIsRecording = false;
+      let spRecordStartTime = 0;
+      let spTimerInterval = null;
+      let spAudioCtx = null;
+      let spAnalyser = null;
+      let spWaveformRaf = null;
+      let spRecognition = null;
+      let spLastTranscript = "";
+      let spLastScore = null;
 
       const flashcardScene = document.getElementById("flashcardScene");
+
+      function getCurrentSpeakingTargetText(card) {
+        if (!card) return "";
+        return fcSpeakingTargetMode === "sentence" ? card.exDe : card.speakableWord;
+      }
+
+      function normalizeGermanForCompare(str) {
+        return String(str || "")
+          .toLowerCase()
+          .replace(/^(der\/die|der\/das|der|die|das|\(das\))\s+/i, "")
+          .replace(/[.,!?;:"'„“”()\[\]·\-–—/]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      function computePronunciationSimilarity(targetStr, spokenStr) {
+        const a = normalizeGermanForCompare(targetStr);
+        const b = normalizeGermanForCompare(spokenStr);
+        if (!a || !b) return 0;
+        if (a === b) return 100;
+
+        const m = a.length;
+        const n = b.length;
+        const dp = [];
+        for (let i = 0; i <= m; i++) {
+          dp[i] = [i];
+        }
+        for (let j = 0; j <= n; j++) {
+          dp[0][j] = j;
+        }
+        for (let i = 1; i <= m; i++) {
+          for (let j = 1; j <= n; j++) {
+            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+            dp[i][j] = Math.min(
+              dp[i - 1][j] + 1,
+              dp[i][j - 1] + 1,
+              dp[i - 1][j - 1] + cost
+            );
+          }
+        }
+        const maxLen = Math.max(m, n);
+        return Math.max(0, Math.round(((maxLen - dp[m][n]) / maxLen) * 100));
+      }
+
+      function drawIdleWaveform(messageText) {
+        const canvas = document.getElementById("fcSpeakingWaveform");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const barColor = isDark ? "rgba(148, 163, 184, 0.28)" : "rgba(100, 116, 139, 0.25)";
+        const barCount = 38;
+        const step = w / barCount;
+        for (let i = 0; i < barCount; i++) {
+          const amp = 4 + Math.sin(i * 0.45) * 3 + (spRecordedBlobUrl ? 5 : 0);
+          const x = i * step + 3;
+          const y = (h - amp * 2) / 2;
+          ctx.fillStyle = spRecordedBlobUrl ? (isDark ? "rgba(56, 189, 248, 0.55)" : "rgba(15, 76, 129, 0.45)") : barColor;
+          ctx.fillRect(x, y, Math.max(2, step - 4), amp * 2);
+        }
+
+        if (messageText) {
+          ctx.fillStyle = isDark ? "#94A3B8" : "#4A5568";
+          ctx.font = "600 11px Inter, sans-serif";
+          ctx.textAlign = "right";
+          ctx.fillText(messageText, w - 8, 14);
+        }
+      }
+
+      function renderLiveRecordingWaveform() {
+        const canvas = document.getElementById("fcSpeakingWaveform");
+        if (!canvas || !spAnalyser || !spIsRecording) return;
+        const ctx = canvas.getContext("2d");
+        const w = canvas.width;
+        const h = canvas.height;
+        const bufferLength = spAnalyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        function drawFrame() {
+          if (!spIsRecording || !spAnalyser) return;
+          spWaveformRaf = requestAnimationFrame(drawFrame);
+          spAnalyser.getByteFrequencyData(dataArray);
+          ctx.clearRect(0, 0, w, h);
+
+          const barCount = 38;
+          const step = w / barCount;
+          for (let i = 0; i < barCount; i++) {
+            const val = dataArray[i] || 0;
+            const barHeight = Math.max(4, (val / 255) * (h - 8));
+            const x = i * step + 2;
+            const y = (h - barHeight) / 2;
+            ctx.fillStyle = "#E11D48";
+            ctx.fillRect(x, y, Math.max(2, step - 4), barHeight);
+          }
+        }
+        drawFrame();
+      }
+
+      function stopSpeakingPracticeRecording(silentReset) {
+        if (spTimerInterval) {
+          clearInterval(spTimerInterval);
+          spTimerInterval = null;
+        }
+        if (spWaveformRaf) {
+          cancelAnimationFrame(spWaveformRaf);
+          spWaveformRaf = null;
+        }
+        if (spRecognition) {
+          try { spRecognition.stop(); } catch (e) {}
+          spRecognition = null;
+        }
+        if (spMediaRecorder && spMediaRecorder.state !== "inactive") {
+          try { spMediaRecorder.stop(); } catch (e) {}
+        }
+        if (spMediaStream) {
+          spMediaStream.getTracks().forEach(function(track) {
+            try { track.stop(); } catch (e) {}
+          });
+          spMediaStream = null;
+        }
+        if (spAudioCtx) {
+          try { spAudioCtx.close(); } catch (e) {}
+          spAudioCtx = null;
+          spAnalyser = null;
+        }
+        spIsRecording = false;
+        const recBtn = document.getElementById("fcRecordToggleBtn");
+        const recIcon = document.getElementById("fcRecordBtnIcon");
+        const recLabel = document.getElementById("fcRecordBtnLabel");
+        if (recBtn) recBtn.classList.remove("is-recording");
+        if (recIcon) recIcon.textContent = "🎙";
+        if (recLabel) recLabel.textContent = spRecordedBlobUrl ? "Record Again" : "Record My Voice";
+        if (silentReset) {
+          drawIdleWaveform();
+        }
+      }
+
+      function updateSpeakingFeedbackUI() {
+        const feedbackEl = document.getElementById("fcSpeakingFeedbackBox");
+        if (!feedbackEl || !fcDeck[fcIndex]) return;
+        const card = fcDeck[fcIndex];
+        const targetText = getCurrentSpeakingTargetText(card);
+
+        if (!spRecordedBlobUrl) {
+          feedbackEl.innerHTML =
+            '<span>Click <strong>Record My Voice</strong> (or press <kbd>R</kbd>) and say <strong>"' +
+            escapeHtml(targetText) +
+            '"</strong> aloud to compare against the Speech Synthesis API.</span>';
+          return;
+        }
+
+        if (spLastTranscript) {
+          const score = spLastScore !== null ? spLastScore : computePronunciationSimilarity(targetText, spLastTranscript);
+          const scoreClass = score >= 80 ? "score-high" : (score >= 55 ? "score-mid" : "score-low");
+          const verdict = score >= 80 ? "Excellent Match" : (score >= 55 ? "Good Attempt" : "Keep Practicing");
+          feedbackEl.innerHTML =
+            '<div>' +
+              '<span>Heard: <strong>"' + escapeHtml(spLastTranscript) + '"</strong></span> ' +
+              '<span aria-hidden="true">·</span> ' +
+              '<span>Target: <strong>"' + escapeHtml(targetText) + '"</strong></span>' +
+            '</div>' +
+            '<span class="pronunciation-score-badge ' + scoreClass + '">' +
+              '<span>' + score + '% Match</span>' +
+              '<span>·</span>' +
+              '<span>' + verdict + '</span>' +
+            '</span>';
+        } else {
+          feedbackEl.innerHTML =
+            '<span>Voice recording saved! Click <strong>⇄ Compare Both (Speech Synthesis → Yours)</strong> to hear the native German synthesis followed immediately by your recording.</span>';
+        }
+      }
+
+      function updateSpeakingPracticePanel() {
+        const panelEl = document.getElementById("fcSpeakingPracticePanel");
+        const toggleBtn = document.getElementById("fcToggleSpeakingBtn");
+        if (!panelEl || !toggleBtn) return;
+
+        toggleBtn.setAttribute("aria-expanded", fcSpeakingOpen ? "true" : "false");
+        toggleBtn.classList.toggle("btn-primary", fcSpeakingOpen);
+
+        if (!fcSpeakingOpen || !fcDeck[fcIndex]) {
+          panelEl.classList.remove("open");
+          stopSpeakingPracticeRecording(true);
+          return;
+        }
+
+        panelEl.classList.add("open");
+        const card = fcDeck[fcIndex];
+        const currentKey = card.id + ":" + fcSpeakingTargetMode;
+
+        if (spRecordedCardKey !== currentKey) {
+          stopSpeakingPracticeRecording(true);
+          if (spRecordedBlobUrl) {
+            try { URL.revokeObjectURL(spRecordedBlobUrl); } catch (e) {}
+            spRecordedBlobUrl = null;
+          }
+          spRecordedCardKey = currentKey;
+          spLastTranscript = "";
+          spLastScore = null;
+          const timerEl = document.getElementById("fcSpeakingTimerText");
+          if (timerEl) timerEl.textContent = "00:00.0";
+        }
+
+        const targetText = getCurrentSpeakingTargetText(card);
+        document.getElementById("fcSpeakTargetWordBtn").classList.toggle("active", fcSpeakingTargetMode === "word");
+        document.getElementById("fcSpeakTargetSentBtn").classList.toggle("active", fcSpeakingTargetMode === "sentence");
+
+        document.getElementById("fcSpeakingTargetMeta").textContent =
+          fcSpeakingTargetMode === "sentence"
+            ? ("Target German Sentence · " + card.level + " · " + card.catName)
+            : ("Target German Headword · " + card.genderLabel);
+        document.getElementById("fcSpeakingTargetText").textContent = targetText;
+        document.getElementById("fcSpeakingTargetMeaning").textContent =
+          fcSpeakingTargetMode === "sentence"
+            ? card.exEn
+            : (card.en + (card.bn ? " · বাংলা: " + card.bn : ""));
+
+        const syllHintEl = document.getElementById("fcSpeakingSyllableHint");
+        if (syllHintEl) {
+          syllHintEl.textContent =
+            fcSpeakingTargetMode === "word"
+              ? ("Headword: " + card.de)
+              : ("Word: " + card.speakableWord);
+        }
+
+        const hasRecording = Boolean(spRecordedBlobUrl);
+        document.getElementById("fcPlayUserAudioBtn").disabled = !hasRecording;
+        document.getElementById("fcCompareBothBtn").disabled = !hasRecording;
+        document.getElementById("fcRecordBtnLabel").textContent = hasRecording ? "Record Again" : "Record My Voice";
+
+        const statusBadge = document.getElementById("fcSpeakingStatusBadge");
+        if (statusBadge && !spIsRecording) {
+          statusBadge.className = "speaking-status-badge tabular-nums" + (hasRecording ? " status-ready" : "");
+          statusBadge.textContent = hasRecording ? "✓ Recording Ready" : "Ready to Record";
+        }
+
+        // Show detected German synthesis voice name if available
+        if ("speechSynthesis" in window) {
+          const voices = window.speechSynthesis.getVoices();
+          const deVoice = voices.find(function(v) {
+            return v.lang && v.lang.toLowerCase().startsWith("de");
+          });
+          const voiceLabel = document.getElementById("fcSpeakingVoiceName");
+          if (voiceLabel && deVoice) {
+            voiceLabel.textContent = deVoice.name.slice(0, 22);
+          }
+        }
+
+        drawIdleWaveform(hasRecording ? "Recorded clip ready" : "Mic idle");
+        updateSpeakingFeedbackUI();
+      }
+
+      async function startSpeakingPracticeRecording() {
+        if (!fcDeck[fcIndex]) return;
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          const feedbackEl = document.getElementById("fcSpeakingFeedbackBox");
+          if (feedbackEl) {
+            feedbackEl.innerHTML = '<span style="color: var(--semantic-error);">Microphone recording is not supported in this browser environment.</span>';
+          }
+          return;
+        }
+
+        try {
+          stopSpeakingPracticeRecording(true);
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          spMediaStream = stream;
+          spAudioChunks = [];
+          spLastTranscript = "";
+          spLastScore = null;
+
+          const card = fcDeck[fcIndex];
+          const targetText = getCurrentSpeakingTargetText(card);
+          spRecordedCardKey = card.id + ":" + fcSpeakingTargetMode;
+
+          // Web Audio Analyser for Live Waveform
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            spAudioCtx = new AudioContextClass();
+            const source = spAudioCtx.createMediaStreamSource(stream);
+            spAnalyser = spAudioCtx.createAnalyser();
+            spAnalyser.fftSize = 128;
+            source.connect(spAnalyser);
+          }
+
+          // Optional SpeechRecognition (de-DE) for automatic pronunciation match score
+          const SpeechRecClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if (SpeechRecClass) {
+            try {
+              spRecognition = new SpeechRecClass();
+              spRecognition.lang = "de-DE";
+              spRecognition.interimResults = true;
+              spRecognition.maxAlternatives = 1;
+              spRecognition.onresult = function(event) {
+                let transcript = "";
+                for (let i = 0; i < event.results.length; i++) {
+                  transcript += event.results[i][0].transcript;
+                }
+                if (transcript.trim()) {
+                  spLastTranscript = transcript.trim();
+                  spLastScore = computePronunciationSimilarity(targetText, spLastTranscript);
+                  updateSpeakingFeedbackUI();
+                }
+              };
+              spRecognition.onerror = function() {};
+              spRecognition.start();
+            } catch (recErr) {
+              spRecognition = null;
+            }
+          }
+
+          spMediaRecorder = new MediaRecorder(stream);
+          spMediaRecorder.ondataavailable = function(e) {
+            if (e.data && e.data.size > 0) {
+              spAudioChunks.push(e.data);
+            }
+          };
+
+          spMediaRecorder.onstop = function() {
+            if (spAudioChunks.length > 0) {
+              if (spRecordedBlobUrl) {
+                try { URL.revokeObjectURL(spRecordedBlobUrl); } catch (e) {}
+              }
+              const blob = new Blob(spAudioChunks, { type: spMediaRecorder.mimeType || "audio/webm" });
+              spRecordedBlobUrl = URL.createObjectURL(blob);
+            }
+            stopSpeakingPracticeRecording(false);
+            updateSpeakingPracticePanel();
+          };
+
+          spMediaRecorder.start();
+          spIsRecording = true;
+          spRecordStartTime = performance.now();
+
+          const statusBadge = document.getElementById("fcSpeakingStatusBadge");
+          if (statusBadge) {
+            statusBadge.className = "speaking-status-badge tabular-nums status-recording";
+            statusBadge.textContent = "● Recording...";
+          }
+
+          const recBtn = document.getElementById("fcRecordToggleBtn");
+          const recIcon = document.getElementById("fcRecordBtnIcon");
+          const recLabel = document.getElementById("fcRecordBtnLabel");
+          if (recBtn) recBtn.classList.add("is-recording");
+          if (recIcon) recIcon.textContent = "⏹";
+          if (recLabel) recLabel.textContent = "Stop Recording";
+
+          const timerEl = document.getElementById("fcSpeakingTimerText");
+          spTimerInterval = setInterval(function() {
+            const elapsedSec = (performance.now() - spRecordStartTime) / 1000;
+            const mins = String(Math.floor(elapsedSec / 60)).padStart(2, "0");
+            const secs = (elapsedSec % 60).toFixed(1).padStart(4, "0");
+            if (timerEl) timerEl.textContent = mins + ":" + secs;
+            if (elapsedSec >= 12) {
+              stopSpeakingPracticeRecording(false);
+            }
+          }, 100);
+
+          renderLiveRecordingWaveform();
+        } catch (err) {
+          stopSpeakingPracticeRecording(true);
+          const feedbackEl = document.getElementById("fcSpeakingFeedbackBox");
+          if (feedbackEl) {
+            feedbackEl.innerHTML =
+              '<span style="color: var(--semantic-error);">Microphone permission was denied or unavailable. Please allow microphone access to record your voice.</span>';
+          }
+        }
+      }
+
+      function playUserRecordedVoice(onComplete) {
+        if (!spRecordedBlobUrl) {
+          if (typeof onComplete === "function") onComplete();
+          return;
+        }
+        if (spUserAudioEl) {
+          try {
+            spUserAudioEl.pause();
+            spUserAudioEl.currentTime = 0;
+          } catch (e) {}
+        }
+        const userCol = document.getElementById("fcSpeakingUserCol");
+        if (userCol) userCol.classList.add("active-playing");
+
+        spUserAudioEl = new Audio(spRecordedBlobUrl);
+        spUserAudioEl.onended = function() {
+          if (userCol) userCol.classList.remove("active-playing");
+          if (typeof onComplete === "function") onComplete();
+        };
+        spUserAudioEl.onerror = function() {
+          if (userCol) userCol.classList.remove("active-playing");
+          if (typeof onComplete === "function") onComplete();
+        };
+        spUserAudioEl.play().catch(function() {
+          if (userCol) userCol.classList.remove("active-playing");
+          if (typeof onComplete === "function") onComplete();
+        });
+      }
+
+      function comparePronunciationSideBySide() {
+        if (!fcDeck[fcIndex] || !spRecordedBlobUrl) return;
+        stopSpeakingPracticeRecording(false);
+        const card = fcDeck[fcIndex];
+        const targetText = getCurrentSpeakingTargetText(card);
+
+        const refCol = document.getElementById("fcSpeakingRefCol");
+        const userCol = document.getElementById("fcSpeakingUserCol");
+        const statusBadge = document.getElementById("fcSpeakingStatusBadge");
+
+        if (statusBadge) {
+          statusBadge.className = "speaking-status-badge tabular-nums status-comparing";
+          statusBadge.textContent = "1/2 Playing Speech Synthesis...";
+        }
+        if (refCol) refCol.classList.add("active-playing");
+        if (userCol) userCol.classList.remove("active-playing");
+
+        speakGerman(targetText, 0.92, function() {
+          if (refCol) refCol.classList.remove("active-playing");
+          if (statusBadge) {
+            statusBadge.className = "speaking-status-badge tabular-nums status-comparing";
+            statusBadge.textContent = "2/2 Playing Your Voice...";
+          }
+          setTimeout(function() {
+            playUserRecordedVoice(function() {
+              if (statusBadge) {
+                statusBadge.className = "speaking-status-badge tabular-nums status-ready";
+                statusBadge.textContent = "✓ Comparison Complete";
+              }
+            });
+          }, 260);
+        });
+      }
 
       function buildFlashcardDeck() {
         const catVal = document.getElementById("fcCategorySelect").value;
@@ -4281,7 +5066,7 @@
         if (fcIndex >= fcDeck.length) fcIndex = 0;
         if (fcIndex < 0) fcIndex = fcDeck.length - 1;
 
-         const card = fcDeck[fcIndex];
+        const card = fcDeck[fcIndex];
         markWordStudied(card.id);
         const catSelect = document.getElementById("fcCategorySelect");
         const selectedLabel = catSelect.options[catSelect.selectedIndex]
@@ -4318,6 +5103,7 @@
 
         syncFlashcardHardState();
         updateFlashcardDetailsPanel();
+        updateSpeakingPracticePanel();
       }
 
       function syncFlashcardHardState() {
@@ -4377,6 +5163,55 @@
       document.getElementById("fcMarkHardMainBtn").addEventListener("click", handleFlashcardStarClick);
       document.getElementById("fcMarkLearnedMainBtn").addEventListener("click", function() {
         if (fcDeck[fcIndex]) markWordLearned(fcDeck[fcIndex].id);
+      });
+
+      document.getElementById("fcToggleSpeakingBtn").addEventListener("click", function() {
+        fcSpeakingOpen = !fcSpeakingOpen;
+        updateSpeakingPracticePanel();
+      });
+
+      document.getElementById("fcSpeakTargetWordBtn").addEventListener("click", function() {
+        fcSpeakingTargetMode = "word";
+        updateSpeakingPracticePanel();
+      });
+
+      document.getElementById("fcSpeakTargetSentBtn").addEventListener("click", function() {
+        fcSpeakingTargetMode = "sentence";
+        updateSpeakingPracticePanel();
+      });
+
+      document.getElementById("fcSpeakRefNormalBtn").addEventListener("click", function() {
+        if (!fcDeck[fcIndex]) return;
+        const refCol = document.getElementById("fcSpeakingRefCol");
+        if (refCol) refCol.classList.add("active-playing");
+        speakGerman(getCurrentSpeakingTargetText(fcDeck[fcIndex]), 0.92, function() {
+          if (refCol) refCol.classList.remove("active-playing");
+        });
+      });
+
+      document.getElementById("fcSpeakRefSlowBtn").addEventListener("click", function() {
+        if (!fcDeck[fcIndex]) return;
+        const refCol = document.getElementById("fcSpeakingRefCol");
+        if (refCol) refCol.classList.add("active-playing");
+        speakGerman(getCurrentSpeakingTargetText(fcDeck[fcIndex]), 0.65, function() {
+          if (refCol) refCol.classList.remove("active-playing");
+        });
+      });
+
+      document.getElementById("fcRecordToggleBtn").addEventListener("click", function() {
+        if (spIsRecording) {
+          stopSpeakingPracticeRecording(false);
+        } else {
+          startSpeakingPracticeRecording();
+        }
+      });
+
+      document.getElementById("fcPlayUserAudioBtn").addEventListener("click", function() {
+        playUserRecordedVoice();
+      });
+
+      document.getElementById("fcCompareBothBtn").addEventListener("click", function() {
+        comparePronunciationSideBySide();
       });
 
       document.getElementById("fcToggleDetailsBtn").addEventListener("click", function() {
@@ -4448,6 +5283,14 @@
         } else if (e.key.toLowerCase() === "d") {
           e.preventDefault();
           document.getElementById("fcToggleDetailsBtn").click();
+        } else if (e.key.toLowerCase() === "r") {
+          e.preventDefault();
+          if (!fcSpeakingOpen) {
+            fcSpeakingOpen = true;
+            updateSpeakingPracticePanel();
+          } else {
+            document.getElementById("fcRecordToggleBtn").click();
+          }
         }
       });
 
