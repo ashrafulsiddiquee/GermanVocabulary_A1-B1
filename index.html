@@ -6,26 +6,35 @@
   <title>German vocabulary A1 to B1</title>
   <meta name="description" content="Complete interactive German vocabulary A1 to B1 learning web application (2,731 words across A1, A2, and B1) with 3D flashcards, English & Bengali meanings, audio pronunciation, grammar details, quiz mode, and progress tracking." />
   <meta name="keywords" content="German vocabulary A1 to B1, Deutsch A1 A2 B1 Wortschatz, German Flashcards, German Quiz, German to English Bengali Vocabulary" />
-  <meta name="author" content="Md Ashraful Hakim Khan Siddiquee" />
+  <meta name="author" content="Md Ashraful Hakim Khan Siddiquee · KhanSoft" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230F172A'/%3E%3Crect x='8' y='52' width='16' height='4' rx='2' fill='%2338BDF8'/%3E%3Crect x='24' y='52' width='16' height='4' rx='2' fill='%23E11D48'/%3E%3Crect x='40' y='52' width='16' height='4' rx='2' fill='%23F59E0B'/%3E%3Cpath d='M16 14v30M16 29l13-15M21 24l10 20' stroke='%23F8FAFC' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M48 18c-2-2.5-5.5-3.5-9-2.5-3.8 1-5.2 4.8-2.5 7.2 2.5 2.2 8.5 3.2 11 6.2 2.8 3.4 1.2 8.8-3.5 10.3-4.2 1.3-8.8 0-11-2.8' stroke='%2338BDF8' stroke-width='4.5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="German vocabulary A1 to B1" />
-  <meta property="og:description" content="Complete interactive German vocabulary A1 to B1 learning web application (2,731 words across A1, A2, and B1) with 3D flashcards, English & Bengali meanings, audio pronunciation, grammar details, quiz mode, and progress tracking." />
-  <meta property="og:site_name" content="German vocabulary A1 to B1" />
+  <meta property="og:title" content="German vocabulary A1 to B1 | KhanSoft" />
+  <meta property="og:description" content="Complete interactive German vocabulary A1 to B1 learning web application by KhanSoft (2,731 words across A1, A2, and B1) with 3D flashcards, English & Bengali meanings, audio pronunciation, grammar details, quiz mode, and progress tracking." />
+  <meta property="og:site_name" content="KhanSoft · German vocabulary A1 to B1" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="German vocabulary A1 to B1" />
-  <meta name="twitter:description" content="Master all 2,731 German A1, A2, and B1 words and example sentences across 43 lessons with interactive 3D flashcards, English & Bengali translations, audio pronunciation, and quizzes." />
+  <meta name="twitter:title" content="German vocabulary A1 to B1 | KhanSoft" />
+  <meta name="twitter:description" content="Master all 2,731 German A1, A2, and B1 words and example sentences across 43 lessons with interactive 3D flashcards, English & Bengali translations, audio pronunciation, and quizzes by KhanSoft." />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "German vocabulary A1 to B1",
+    "brand": {
+      "@type": "Brand",
+      "name": "KhanSoft"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "KhanSoft"
+    },
     "applicationCategory": "EducationalApplication",
     "operatingSystem": "All",
     "author": {
       "@type": "Person",
       "name": "Md Ashraful Hakim Khan Siddiquee"
     },
-    "description": "Interactive German Level A1 vocabulary learning web application with flashcards, categorized words and sentences, multiple-choice quiz, and hardest words spaced repetition.",
+    "description": "Interactive German Level A1 to B1 vocabulary learning web application by KhanSoft with flashcards, categorized words and sentences, multiple-choice quiz, and hardest words spaced repetition.",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -153,16 +162,37 @@
     .top-header-inner {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0.875rem 1.5rem;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .top-header-row-1 {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 2rem;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .top-header-row-2 {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      width: 100%;
+      padding-top: 0.45rem;
+      border-top: 1px solid var(--border-hairline);
     }
 
     .brand-wordmark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
       font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 1.125rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--text-primary);
@@ -171,23 +201,56 @@
       flex-shrink: 0;
     }
 
+    .khansoft-logo-svg {
+      width: 34px;
+      height: 34px;
+      flex-shrink: 0;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.18);
+      transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .brand-wordmark:hover .khansoft-logo-svg {
+      transform: scale(1.04);
+    }
+
+    .khansoft-brand-primary {
+      font-weight: 800;
+      color: var(--accent-primary);
+      letter-spacing: -0.03em;
+    }
+
+    .khansoft-brand-divider {
+      color: var(--border-strong);
+      font-weight: 400;
+      margin: 0 0.1rem;
+    }
+
+    .khansoft-hero-lockup {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .khansoft-hero-logo-sm {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      border-radius: 0.35rem;
+    }
+
     .primary-nav {
       display: flex;
       align-items: center;
-      gap: 1.75rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    .primary-nav::-webkit-scrollbar {
-      display: none;
+      flex-wrap: wrap;
+      gap: 1.35rem;
     }
 
     .nav-link {
       font-size: 0.9375rem;
       font-weight: 600;
       color: var(--text-muted);
-      padding: 0.375rem 0;
+      padding: 0.325rem 0;
       border-bottom: 2px solid transparent;
       white-space: nowrap;
       flex-shrink: 0;
@@ -1573,6 +1636,459 @@
       color: var(--gender-die);
       border: 1px solid rgba(225, 29, 72, 0.3);
     }
+
+    /* ==========================================
+       GORGEOUS ARCHITECTURAL LANDING PAGE (#mode-home)
+       ========================================== */
+    .landing-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+
+    /* Hero Split Stage */
+    .landing-hero-grid {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 2.25rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 980px) {
+      .landing-hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .landing-hero-copy {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 1.25rem;
+      padding: 2.5rem 2.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.75rem;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .landing-hero-flag-bar {
+      display: flex;
+      height: 4px;
+      width: 84px;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 0.25rem;
+    }
+
+    .landing-hero-flag-bar span:nth-child(1) { flex: 1; background-color: #1E293B; }
+    html[data-theme="dark"] .landing-hero-flag-bar span:nth-child(1) { background-color: #94A3B8; }
+    .landing-hero-flag-bar span:nth-child(2) { flex: 1; background-color: #E11D48; }
+    .landing-hero-flag-bar span:nth-child(3) { flex: 1; background-color: #F59E0B; }
+
+    .landing-kicker {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .landing-display-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.15rem, 3.8vw, 3.35rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      text-wrap: balance;
+    }
+
+    .landing-display-accent {
+      color: var(--accent-primary);
+    }
+
+    .landing-lead {
+      font-size: 1.03rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      max-width: 64ch;
+    }
+
+    .landing-search-box {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-strong);
+      border-radius: 0.75rem;
+      padding: 0.4rem 0.4rem 0.4rem 1rem;
+      transition: border-color 0.15s ease;
+    }
+
+    .landing-search-box:focus-within {
+      border-color: var(--accent-primary);
+    }
+
+    .landing-search-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 0.9375rem;
+      min-height: 38px;
+      outline: none;
+    }
+
+    .landing-quick-tags {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.55rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .landing-tag-btn {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 0.15rem 0.5rem;
+      border-radius: 0.375rem;
+      border: 1px solid var(--border-hairline);
+      background-color: var(--bg-subtle);
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .landing-tag-btn:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .landing-cta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      padding-top: 0.25rem;
+    }
+
+    .btn-hero-lg {
+      padding: 0.8rem 1.4rem;
+      font-size: 0.9375rem;
+      border-radius: 0.625rem;
+      min-height: 46px;
+    }
+
+    /* Right Hero Stage: Interactive "Wort des Moments" Sandbox */
+    .landing-spotlight-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 1.25rem;
+      padding: 1.75rem 1.85rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.25rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .spotlight-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .spotlight-stage {
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.875rem;
+      padding: 1.35rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      flex: 1;
+      justify-content: center;
+    }
+
+    .spotlight-de-word {
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 2.8vw, 2.25rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--text-primary);
+    }
+
+    .spotlight-en-word {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+    }
+
+    .spotlight-bn-word {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--gender-das);
+    }
+
+    .spotlight-sentence-box {
+      margin-top: 0.35rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    /* 4-Column Quantitative & Personal Mastery Strip */
+    .landing-ledger-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    @media (max-width: 960px) {
+      .landing-ledger-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 560px) {
+      .landing-ledger-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ledger-cell {
+      padding: 1.5rem 1.65rem;
+      border-right: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.45rem;
+    }
+
+    .ledger-cell:last-child {
+      border-right: none;
+    }
+
+    @media (max-width: 960px) {
+      .ledger-cell:nth-child(2) {
+        border-right: none;
+      }
+      .ledger-cell:nth-child(1),
+      .ledger-cell:nth-child(2) {
+        border-bottom: 1px solid var(--border-hairline);
+      }
+    }
+
+    .ledger-index {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .ledger-big-num {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .ledger-sub {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    /* CEFR Pathway 3-Column Matrix */
+    .cefr-pathway-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 980px) {
+      .cefr-pathway-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cefr-tier-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 1.125rem;
+      padding: 1.85rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.35rem;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.16s ease;
+    }
+
+    .cefr-tier-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--border-strong);
+    }
+
+    .cefr-tier-top {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .cefr-tier-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .cefr-tier-num {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .cefr-tier-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .cefr-tier-desc {
+      font-size: 0.885rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .cefr-sample-words {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      padding: 0.9rem 1rem;
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.75rem;
+    }
+
+    .cefr-sample-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.825rem;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .cefr-sample-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Interactive Grammatical Gender & Verb Lab Strip */
+    .grammar-lab-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 1.125rem;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .grammar-lab-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 880px) {
+      .grammar-lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .grammar-sample-item {
+      background-color: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: 0.75rem;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    /* Asymmetric Bento Grid of Study Modes */
+    .landing-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+    }
+
+    .bento-span-7 {
+      grid-column: span 7;
+    }
+
+    .bento-span-5 {
+      grid-column: span 5;
+    }
+
+    @media (max-width: 960px) {
+      .bento-span-7,
+      .bento-span-5 {
+        grid-column: span 12;
+      }
+    }
+
+    .bento-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 1.125rem;
+      padding: 1.85rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.25rem;
+      box-shadow: var(--shadow-card);
+    }
+
+    .bento-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 640px) {
+      .landing-hero-copy {
+        padding: 1.5rem 1.25rem;
+      }
+      .landing-spotlight-card {
+        padding: 1.25rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1580,28 +2096,43 @@
   <!-- Top Navigation Bar -->
   <header class="top-header">
     <div class="top-header-inner">
-      <a href="#flashcards" class="brand-wordmark" id="brandHomeLink">German vocabulary A1 to B1</a>
+      <div class="top-header-row-1">
+        <a href="#home" class="brand-wordmark" id="brandHomeLink" aria-label="KhanSoft — German vocabulary A1 to B1 Home">
+          <svg class="khansoft-logo-svg" viewBox="0 0 64 64" role="img" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#0F172A" />
+            <rect x="8" y="53" width="16" height="4" rx="2" fill="#38BDF8" />
+            <rect x="24" y="53" width="16" height="4" rx="2" fill="#E11D48" />
+            <rect x="40" y="53" width="16" height="4" rx="2" fill="#F59E0B" />
+            <path d="M15 14v30M15 29l13-15M20 24l10 20" stroke="#F8FAFC" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <path d="M49 18c-2-2.5-5.5-3.5-9-2.5-3.8 1-5.2 4.8-2.5 7.2 2.5 2.2 8.5 3.2 11 6.2 2.8 3.4 1.2 8.8-3.5 10.3-4.2 1.3-8.8 0-11-2.8" stroke="#38BDF8" stroke-width="4.5" stroke-linecap="round" fill="none" />
+          </svg>
+          <span><span class="khansoft-brand-primary">KhanSoft</span> <span class="khansoft-brand-divider">·</span> German vocabulary A1 to B1</span>
+        </a>
 
-      <nav class="primary-nav" aria-label="Main Navigation">
-        <button type="button" class="nav-link active" data-mode="flashcards">Flashcards</button>
-        <button type="button" class="nav-link" data-mode="categories">Words &amp; Sentences</button>
-        <button type="button" class="nav-link" data-mode="quiz">Quiz Mode</button>
-        <button type="button" class="nav-link" data-mode="hard" id="navHardWordsBtn">Hardest Words (0)</button>
-        <button type="button" class="nav-link" data-mode="progress" id="navProgressBtn">Progresses (0%)</button>
-      </nav>
+        <nav class="primary-nav" aria-label="Main Navigation">
+          <button type="button" class="nav-link active" data-mode="home">Home</button>
+          <button type="button" class="nav-link" data-mode="flashcards">Flashcards</button>
+          <button type="button" class="nav-link" data-mode="categories">Words &amp; Sentences</button>
+          <button type="button" class="nav-link" data-mode="quiz">Quiz Mode</button>
+          <button type="button" class="nav-link" data-mode="hard" id="navHardWordsBtn">Hardest Words (0)</button>
+          <button type="button" class="nav-link" data-mode="progress" id="navProgressBtn">Progresses (0%)</button>
+        </nav>
+      </div>
 
-      <div class="header-actions">
-        <button type="button" class="streak-tracker-btn tabular-nums" id="streakTrackerBtn" aria-label="Open Daily Study Streak and 15-Minute Practice Progress">
-          <span class="streak-flame" aria-hidden="true">🔥</span>
-          <span id="headerStreakDays">0d Streak</span>
-          <span aria-hidden="true">·</span>
-          <span id="headerStreakTimer">00:00 / 15:00</span>
-        </button>
+      <div class="top-header-row-2">
+        <div class="header-actions">
+          <button type="button" class="streak-tracker-btn tabular-nums" id="streakTrackerBtn" aria-label="Open Daily Study Streak and 15-Minute Practice Progress">
+            <span class="streak-flame" aria-hidden="true">🔥</span>
+            <span id="headerStreakDays">0d Streak</span>
+            <span aria-hidden="true">·</span>
+            <span id="headerStreakTimer">00:00 / 15:00</span>
+          </button>
 
-        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light or Dark Theme">
-          <span id="themeIcon" aria-hidden="true">☾</span>
-          <span id="themeLabel">Dark Mode</span>
-        </button>
+          <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-label="Toggle Light or Dark Theme">
+            <span id="themeIcon" aria-hidden="true">☾</span>
+            <span id="themeLabel">Dark Mode</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -1609,7 +2140,7 @@
   <main class="main-container">
 
     <!-- Global CEFR Level Filter Bar (A1 / A2 / B1) -->
-    <div class="level-switcher-bar" role="region" aria-label="CEFR Level Selection">
+    <div class="level-switcher-bar" id="globalLevelSwitcherBar" style="display: none;" role="region" aria-label="CEFR Level Selection">
       <div class="level-switcher-label">
         <span>CEFR Course Level:</span>
         <span class="meta-inline" id="activeLevelSummaryText">All Levels (A1 · A2 · B1 — 2,731 Words)</span>
@@ -1634,8 +2165,410 @@
       </div>
     </div>
 
+    <!-- MODE 0: GORGEOUS ARCHITECTURAL LANDING PAGE (#mode-home) -->
+    <section id="mode-home" class="mode-section active" aria-labelledby="heading-landing-hero">
+      <div class="landing-wrapper">
+
+        <!-- 1. ASYMMETRIC ARCHITECTURAL HERO + LIVE INTERACTIVE WORD SANDBOX -->
+        <div class="landing-hero-grid">
+          <div class="landing-hero-copy">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+                <div class="khansoft-hero-lockup">
+                  <svg class="khansoft-hero-logo-sm" viewBox="0 0 64 64" aria-hidden="true">
+                    <rect width="64" height="64" rx="14" fill="#0F172A" />
+                    <rect x="8" y="53" width="16" height="4" rx="2" fill="#38BDF8" />
+                    <rect x="24" y="53" width="16" height="4" rx="2" fill="#E11D48" />
+                    <rect x="40" y="53" width="16" height="4" rx="2" fill="#F59E0B" />
+                    <path d="M15 14v30M15 29l13-15M20 24l10 20" stroke="#F8FAFC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                    <path d="M49 18c-2-2.5-5.5-3.5-9-2.5-3.8 1-5.2 4.8-2.5 7.2 2.5 2.2 8.5 3.2 11 6.2 2.8 3.4 1.2 8.8-3.5 10.3-4.2 1.3-8.8 0-11-2.8" stroke="#38BDF8" stroke-width="5" stroke-linecap="round" fill="none" />
+                  </svg>
+                  <span style="font-family: var(--font-display); font-size: 0.875rem; font-weight: 800; color: var(--accent-primary); letter-spacing: -0.01em;">KhanSoft</span>
+                  <span aria-hidden="true" style="color: var(--text-muted);">·</span>
+                  <span style="font-size: 0.8125rem; font-weight: 600; color: var(--text-secondary);">Language Learning Suite</span>
+                </div>
+                <div class="landing-hero-flag-bar" aria-hidden="true" style="margin-bottom: 0;">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="landing-kicker">
+                <span>Goethe-Aligned Lexicon</span>
+                <span aria-hidden="true">·</span>
+                <span>CEFR Levels A1 · A2 · B1</span>
+                <span aria-hidden="true">·</span>
+                <span>Deutsch / English / বাংলা</span>
+              </div>
+              <h1 id="heading-landing-hero" class="landing-display-title">
+                From First German Greeting to <span class="landing-display-accent">Independent B1 Fluency.</span>
+              </h1>
+              <p class="landing-lead">
+                Master all <strong>2,731 authentic German words and example sentences</strong> across 43 structured lessons. Practice with 3D flashcards, native German audio pronunciation, verb conjugation &amp; noun case tables, and trilingual English &amp; Bengali (বাংলা) meanings.
+              </p>
+            </div>
+
+            <!-- Instant Hero Lexicon Search -->
+            <div>
+              <form id="landingQuickSearchForm" class="landing-search-box" role="search" aria-label="Quick search across 2,731 German, English, and Bengali words">
+                <span aria-hidden="true" style="color: var(--text-muted);">⌕</span>
+                <input type="search" id="landingQuickSearchInput" class="landing-search-input" placeholder="Search any German, English, or বাংলা word (e.g. Wohnung, Bewerbung, পরিবেশ, travel)..." />
+                <button type="submit" class="btn btn-primary" style="min-height: 38px; padding: 0.45rem 1rem;">Search Lexicon</button>
+              </form>
+              <div class="landing-quick-tags">
+                <span>Try instant lookup:</span>
+                <button type="button" class="landing-tag-btn" data-quick-query="Wohnung">die Wohnung (A1)</button>
+                <button type="button" class="landing-tag-btn" data-quick-query="Bewerbung">die Bewerbung (A2)</button>
+                <button type="button" class="landing-tag-btn" data-quick-query="Umwelt">die Umwelt (B1)</button>
+                <button type="button" class="landing-tag-btn" data-quick-query="স্বাস্থ্য">স্বাস্থ্য / Gesundheit</button>
+              </div>
+            </div>
+
+            <!-- Primary & Secondary Hero CTAs -->
+            <div class="landing-cta-row">
+              <button type="button" class="btn btn-primary btn-hero-lg" id="heroStartFlashcardsBtn">
+                <span>Start 3D Flashcards</span>
+                <span aria-hidden="true">→</span>
+              </button>
+              <button type="button" class="btn btn-hero-lg" id="heroStartQuizBtn">
+                <span>Take 10-Question Quiz</span>
+              </button>
+              <button type="button" class="btn btn-hero-lg" id="heroStartAudioQuizBtn">
+                <span aria-hidden="true">🔊</span>
+                <span>Audio-Quiz</span>
+              </button>
+              <button type="button" class="btn btn-hero-lg" id="heroExploreLessonsBtn">
+                <span>Explore 43 Lessons</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Hero Column: Live Interactive "Wort des Moments" Sandbox -->
+          <aside class="landing-spotlight-card" aria-label="Interactive Word of the Moment Sandbox">
+            <div class="spotlight-header">
+              <div>
+                <div class="meta-inline" style="font-weight: 700; color: var(--text-primary);">Interactive Lexicon Spotlight</div>
+                <div class="meta-inline" id="spotlightLessonMeta">A1 · Lektion 1</div>
+              </div>
+              <div class="segmented-filter" role="group" aria-label="Spotlight CEFR Level">
+                <button type="button" class="seg-btn active" data-spot-level="A1">A1</button>
+                <button type="button" class="seg-btn" data-spot-level="A2">A2</button>
+                <button type="button" class="seg-btn" data-spot-level="B1">B1</button>
+                <button type="button" class="seg-btn" id="spotlightRandomBtn" title="Load another word">↻ Next</button>
+              </div>
+            </div>
+
+            <!-- Live Word Stage -->
+            <div class="spotlight-stage" id="spotlightStageBox">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                <div class="meta-inline">
+                  <span id="spotlightCefrBadge"></span>
+                  <span id="spotlightGenderBadge" class="gender-der">Maskulin — der</span>
+                </div>
+                <div class="control-group">
+                  <button type="button" class="icon-btn" id="spotlightSpeakWordBtn" title="Pronounce German Word">🔊 Word</button>
+                  <button type="button" class="icon-btn" id="spotlightSpeakSentBtn" title="Pronounce German Sentence">🔊 Sentence</button>
+                </div>
+              </div>
+
+              <div id="spotlightWordDe" class="spotlight-de-word">der Ausflug, ¨-e</div>
+              <div id="spotlightWordPlural" class="meta-inline">Plural: ¨-e</div>
+
+              <div style="margin-top: 0.2rem;">
+                <div id="spotlightWordEn" class="spotlight-en-word">the excursion / trip</div>
+                <div id="spotlightWordBn" class="spotlight-bn-word">বাংলা: ভ্রমণ / সংক্ষিপ্ত সফর</div>
+              </div>
+
+              <!-- View 1: Example Sentence -->
+              <div id="spotlightSentenceView" class="spotlight-sentence-box">
+                <div id="spotlightSentDe" class="sentence-de">Familie Baumann und Lara machen einen Ausflug.</div>
+                <div id="spotlightSentEn" class="sentence-en">Family Baumann and Lara are going on a trip.</div>
+              </div>
+
+              <!-- View 2: Live Grammar / Case / Conjugation Table -->
+              <div id="spotlightGrammarView" class="spotlight-sentence-box" style="display: none;">
+                <div id="spotlightGrammarTitle" class="meta-inline" style="font-weight: 700; color: var(--accent-primary); margin-bottom: 0.25rem;"></div>
+                <table class="conj-table" id="spotlightGrammarTable"></table>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+              <button type="button" class="icon-btn" id="spotlightToggleGrammarBtn">
+                <span id="spotlightGrammarBtnText">▾ View Grammar &amp; Cases</span>
+              </button>
+              <div class="control-group">
+                <button type="button" class="icon-btn star-toggle" id="spotlightStarBtn">☆ Hard</button>
+                <button type="button" class="icon-btn" id="spotlightOpenInFcBtn">Open in Flashcards →</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- 2. FULL-WIDTH QUANTITATIVE CURRICULUM & PERSONAL MASTERY LEDGER -->
+        <div class="landing-ledger-strip" role="region" aria-label="Course Metrics and Personal Progress Summary">
+          <div class="ledger-cell">
+            <span class="ledger-index">01 · COMPLETE LEXICON</span>
+            <div class="ledger-big-num tabular-nums">2,731 Words</div>
+            <div class="ledger-sub tabular-nums">1,098 A1 · 884 A2 · 749 B1 with authentic sentences</div>
+          </div>
+          <div class="ledger-cell">
+            <span class="ledger-index">02 · COURSE ARCHITECTURE</span>
+            <div class="ledger-big-num tabular-nums">43 Lessons</div>
+            <div class="ledger-sub">Meine Wörter im Kurs + Lektion 1–14 across A1, A2 &amp; B1</div>
+          </div>
+          <div class="ledger-cell" id="landingLedgerProgressCell" style="cursor: pointer;" title="Click to open full Progresses dashboard">
+            <span class="ledger-index">03 · YOUR LIVE MASTERY →</span>
+            <div class="ledger-big-num tabular-nums" id="landingMasteryCount">0 / 2,731</div>
+            <div class="ledger-sub tabular-nums" id="landingMasterySub">0% learned · Click to open full Progresses</div>
+          </div>
+          <div class="ledger-cell" id="landingLedgerStreakCell" style="cursor: pointer;" title="Click to open Daily 15-Min Streak Modal">
+            <span class="ledger-index">04 · DAILY 15-MIN GOAL →</span>
+            <div class="ledger-big-num tabular-nums" id="landingStreakCount">🔥 0d Streak</div>
+            <div class="ledger-sub tabular-nums" id="landingStreakSub">Today: 00:00 / 15:00 practice goal</div>
+          </div>
+        </div>
+
+        <!-- 3. INTERACTIVE CEFR CURRICULUM PATHWAY (01. A1 -> 02. A2 -> 03. B1) -->
+        <div>
+          <div class="section-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h2 class="section-title">Structured CEFR Learning Pathway (A1 → A2 → B1)</h2>
+              <p class="section-subtitle">Choose your target proficiency level to filter the flashcard deck, categorized sentence explorer, and adaptive quizzes.</p>
+            </div>
+            <div class="meta-inline">
+              <span>Click any sample word to hear native German pronunciation 🔊</span>
+            </div>
+          </div>
+
+          <div class="cefr-pathway-grid">
+            <!-- 01. LEVEL A1 CARD -->
+            <article class="cefr-tier-card">
+              <div class="cefr-tier-top">
+                <div class="cefr-tier-header-row">
+                  <span class="cefr-tier-num">01. FOUNDATION TIER</span>
+                  <span class="cefr-badge cefr-a1">CEFR A1 · 1,098 Words</span>
+                </div>
+                <h3 class="cefr-tier-title">Level A1 — Beginner</h3>
+                <p class="cefr-tier-desc">
+                  15 lessons from <em>Meine Wörter im Kurs</em> to <em>Lektion 14: Feste</em>. Build everyday foundations: family, shopping, apartment, daily routines, health, and city navigation.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.25rem;">
+                  <div class="meta-inline tabular-nums" style="justify-content: space-between;">
+                    <span>Your A1 Progress</span>
+                    <strong id="landingA1ProgressText">0 / 1,098 (0%)</strong>
+                  </div>
+                  <div class="progress-track" aria-hidden="true">
+                    <div class="progress-fill" id="landingA1ProgressBar" style="width: 0%; background-color: var(--gender-das);"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cefr-sample-words">
+                <div class="meta-inline" style="font-weight: 700; color: var(--text-secondary);">Sample A1 Vocabulary (Click to listen 🔊)</div>
+                <div class="cefr-sample-row">
+                  <span><strong class="gender-die">die</strong> <strong>Wohnung, -en</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="die Wohnung">🔊 apartment · বাসা</button>
+                </div>
+                <div class="cefr-sample-row">
+                  <span><strong class="gender-der">der</strong> <strong>Führerschein, -e</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="der Führerschein">🔊 driver's license · ড্রাইভিং লাইসেন্স</button>
+                </div>
+                <div class="cefr-sample-row">
+                  <span><strong>einkaufen</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="einkaufen">🔊 to shop · কেনাকাটা করা</button>
+                </div>
+              </div>
+
+              <div class="control-group" style="justify-content: space-between; padding-top: 0.25rem;">
+                <button type="button" class="btn btn-primary" data-launch-level="A1" data-launch-mode="flashcards" style="flex: 1;">Study A1 Flashcards →</button>
+                <button type="button" class="btn" data-launch-level="A1" data-launch-mode="categories">Lessons</button>
+                <button type="button" class="btn" data-launch-level="A1" data-launch-mode="quiz">Quiz</button>
+              </div>
+            </article>
+
+            <!-- 02. LEVEL A2 CARD -->
+            <article class="cefr-tier-card">
+              <div class="cefr-tier-top">
+                <div class="cefr-tier-header-row">
+                  <span class="cefr-tier-num">02. ELEMENTARY TIER</span>
+                  <span class="cefr-badge cefr-a2">CEFR A2 · 884 Words</span>
+                </div>
+                <h3 class="cefr-tier-title">Level A2 — Elementary</h3>
+                <p class="cefr-tier-desc">
+                  14 lessons covering workplace communication, media &amp; technology, dining out, moving house, banking, fitness &amp; nutrition, job applications, and travel.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.25rem;">
+                  <div class="meta-inline tabular-nums" style="justify-content: space-between;">
+                    <span>Your A2 Progress</span>
+                    <strong id="landingA2ProgressText">0 / 884 (0%)</strong>
+                  </div>
+                  <div class="progress-track" aria-hidden="true">
+                    <div class="progress-fill" id="landingA2ProgressBar" style="width: 0%; background-color: var(--gender-der);"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cefr-sample-words">
+                <div class="meta-inline" style="font-weight: 700; color: var(--text-secondary);">Sample A2 Vocabulary (Click to listen 🔊)</div>
+                <div class="cefr-sample-row">
+                  <span><strong class="gender-die">die</strong> <strong>Erfahrung, -en</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="die Erfahrung">🔊 experience · অভিজ্ঞতা</button>
+                </div>
+                <div class="cefr-sample-row">
+                  <span><strong class="gender-das">das</strong> <strong>Girokonto, -konten</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="das Girokonto">🔊 checking account · ব্যাংক অ্যাকাউন্ট</button>
+                </div>
+                <div class="cefr-sample-row">
+                  <span><strong>vereinbaren</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="vereinbaren">🔊 to arrange · নির্ধারণ করা</button>
+                </div>
+              </div>
+
+              <div class="control-group" style="justify-content: space-between; padding-top: 0.25rem;">
+                <button type="button" class="btn btn-primary" data-launch-level="A2" data-launch-mode="flashcards" style="flex: 1;">Study A2 Flashcards →</button>
+                <button type="button" class="btn" data-launch-level="A2" data-launch-mode="categories">Lessons</button>
+                <button type="button" class="btn" data-launch-level="A2" data-launch-mode="quiz">Quiz</button>
+              </div>
+            </article>
+
+            <!-- 03. LEVEL B1 CARD -->
+            <article class="cefr-tier-card">
+              <div class="cefr-tier-top">
+                <div class="cefr-tier-header-row">
+                  <span class="cefr-tier-num">03. INTERMEDIATE TIER</span>
+                  <span class="cefr-badge cefr-b1">CEFR B1 · 749 Words</span>
+                </div>
+                <h3 class="cefr-tier-title">Level B1 — Intermediate</h3>
+                <p class="cefr-tier-desc">
+                  14 lessons advancing to independent fluency: character traits, contracts &amp; customer service, future innovation, social norms, environment, and modern history.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.25rem;">
+                  <div class="meta-inline tabular-nums" style="justify-content: space-between;">
+                    <span>Your B1 Progress</span>
+                    <strong id="landingB1ProgressText">0 / 749 (0%)</strong>
+                  </div>
+                  <div class="progress-track" aria-hidden="true">
+                    <div class="progress-fill" id="landingB1ProgressBar" style="width: 0%; background-color: var(--gender-die);"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cefr-sample-words">
+                <div class="meta-inline" style="font-weight: 700; color: var(--text-secondary);">Sample B1 Vocabulary (Click to listen 🔊)</div>
+                <div class="cefr-sample-row">
+                  <span><strong class="gender-die">die</strong> <strong>Eigenschaft, -en</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="die Eigenschaft">🔊 quality / trait · বৈশিষ্ট্য</button>
+                </div>
+                <div class="cefr-sample-row">
+                  <span><strong class="gender-der">der</strong> <strong>Klimawandel</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="der Klimawandel">🔊 climate change · জলবায়ু পরিবর্তন</button>
+                </div>
+                <div class="cefr-sample-row">
+                  <span><strong>sich entscheiden</strong></span>
+                  <button type="button" class="landing-tag-btn" data-speak-sample="sich entscheiden">🔊 to decide · সিদ্ধান্ত নেওয়া</button>
+                </div>
+              </div>
+
+              <div class="control-group" style="justify-content: space-between; padding-top: 0.25rem;">
+                <button type="button" class="btn btn-primary" data-launch-level="B1" data-launch-mode="flashcards" style="flex: 1;">Study B1 Flashcards →</button>
+                <button type="button" class="btn" data-launch-level="B1" data-launch-mode="categories">Lessons</button>
+                <button type="button" class="btn" data-launch-level="B1" data-launch-mode="quiz">Quiz</button>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- 4. INTERACTIVE GRAMMATICAL GENDER & VERB INFLECTION LAB -->
+        <div class="grammar-lab-card" role="region" aria-label="Interactive Grammatical Gender and Verb Explorer">
+          <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+            <div>
+              <h2 class="section-title" style="font-size: 1.5rem;">Interactive Grammatical Gender &amp; Verb Laboratory</h2>
+              <p class="section-subtitle">Color-coded German articles (der / die / das) and verb conjugations make grammatical patterns effortless to remember.</p>
+            </div>
+            <div class="segmented-filter" role="group" aria-label="Preview by Grammatical Type">
+              <button type="button" class="seg-btn active" data-lab-gender="der">Maskulin (der)</button>
+              <button type="button" class="seg-btn" data-lab-gender="die">Feminin (die)</button>
+              <button type="button" class="seg-btn" data-lab-gender="das">Neutrum (das)</button>
+              <button type="button" class="seg-btn" data-lab-gender="other">Verbs &amp; Conjugations</button>
+            </div>
+          </div>
+
+          <div class="grammar-lab-grid" id="landingGrammarLabGrid"></div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-top: 0.25rem; border-top: 1px solid var(--border-hairline);">
+            <span class="meta-inline" id="landingGrammarLabSummary">Showing Maskulin (der) nouns across A1, A2, and B1</span>
+            <button type="button" class="btn" id="landingGrammarPracticeBtn">Practice This Category in 3D Flashcards →</button>
+          </div>
+        </div>
+
+        <!-- 5. ASYMMETRIC BENTO GRID OF CORE STUDY ENGINES -->
+        <div>
+          <div class="section-header" style="margin-bottom: 1.5rem;">
+            <div>
+              <h2 class="section-title">Five Integrated Study Engines</h2>
+              <p class="section-subtitle">Designed for complete retention from first exposure to active recall and listening comprehension.</p>
+            </div>
+          </div>
+
+          <div class="landing-bento-grid">
+            <div class="bento-card bento-span-7">
+              <div>
+                <div class="meta-inline" style="margin-bottom: 0.4rem;">01 · ACTIVE RECALL &amp; DEEP GRAMMAR</div>
+                <h3 class="bento-title">3D Flip Flashcards with Conjugations, Synonyms &amp; Antonyms</h3>
+                <p class="section-subtitle" style="margin-top: 0.45rem;">
+                  Flip cards with Spacebar or click to reveal English and Bengali (বাংলা) meanings, authentic course sentences, and expandable grammatical panels showing Präsens/Perfekt verb tables, Nominativ/Akkusativ/Dativ noun cases, synonyms, and antonyms.
+                </p>
+              </div>
+              <div class="control-group">
+                <button type="button" class="btn btn-primary" data-bento-mode="flashcards">Launch 3D Flashcards →</button>
+              </div>
+            </div>
+
+            <div class="bento-card bento-span-5">
+              <div>
+                <div class="meta-inline" style="margin-bottom: 0.4rem;">02 · ADAPTIVE TESTING &amp; LISTENING</div>
+                <h3 class="bento-title">Standard Quiz &amp; 🔊 Audio-Quiz Mode</h3>
+                <p class="section-subtitle" style="margin-top: 0.45rem;">
+                  Test yourself with 10 randomized multiple-choice questions in English, বাংলা, or both. Switch to 🔊 Audio-Quiz to train pure German listening comprehension. Missed words are automatically saved to Hardest Words.
+                </p>
+              </div>
+              <div class="control-group">
+                <button type="button" class="btn btn-primary" data-bento-mode="quiz">Start Quiz Mode →</button>
+              </div>
+            </div>
+
+            <div class="bento-card bento-span-5">
+              <div>
+                <div class="meta-inline" style="margin-bottom: 0.4rem;">03 · TRILINGUAL REFERENCE</div>
+                <h3 class="bento-title">43-Lesson Categorized Explorer</h3>
+                <p class="section-subtitle" style="margin-top: 0.45rem;">
+                  Filter by CEFR level (A1, A2, B1), lesson topic, or grammatical article (der / die / das), or search live across all 2,731 German words, English glosses, and Bengali meanings.
+                </p>
+              </div>
+              <div class="control-group">
+                <button type="button" class="btn" data-bento-mode="categories">Browse All 43 Lessons →</button>
+              </div>
+            </div>
+
+            <div class="bento-card bento-span-7">
+              <div>
+                <div class="meta-inline" style="margin-bottom: 0.4rem;">04 · SPACED REPETITION &amp; ANALYTICS</div>
+                <h3 class="bento-title">Hardest Words Tracker, Course Progresses &amp; 15-Min Streak</h3>
+                <p class="section-subtitle" style="margin-top: 0.45rem;">
+                  All starred words, failed quiz items, learned vocabulary, quiz scores, and your daily 15-minute study timer are saved locally in your browser so you can pick up right where you left off.
+                </p>
+              </div>
+              <div class="control-group">
+                <button type="button" class="btn" data-bento-mode="progress">View Course Progresses →</button>
+                <button type="button" class="btn" data-bento-mode="hard">Review Hardest Words</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- MODE 1: FLASHCARDS MODE -->
-    <section id="mode-flashcards" class="mode-section active" aria-labelledby="heading-flashcards">
+    <section id="mode-flashcards" class="mode-section" aria-labelledby="heading-flashcards">
       <div class="section-header">
         <div>
           <h1 id="heading-flashcards" class="section-title">3D Vocabulary Flashcards</h1>
@@ -2141,9 +3074,23 @@
   <!-- SEO & Copyright Footer -->
   <footer class="site-footer">
     <div class="site-footer-inner">
-      <p>Copyright © Md Ashraful Hakim Khan Siddiquee. All rights reserved.</p>
+      <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+        <span class="khansoft-hero-lockup">
+          <svg class="khansoft-hero-logo-sm" viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="#0F172A" />
+            <rect x="8" y="53" width="16" height="4" rx="2" fill="#38BDF8" />
+            <rect x="24" y="53" width="16" height="4" rx="2" fill="#E11D48" />
+            <rect x="40" y="53" width="16" height="4" rx="2" fill="#F59E0B" />
+            <path d="M15 14v30M15 29l13-15M20 24l10 20" stroke="#F8FAFC" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            <path d="M49 18c-2-2.5-5.5-3.5-9-2.5-3.8 1-5.2 4.8-2.5 7.2 2.5 2.2 8.5 3.2 11 6.2 2.8 3.4 1.2 8.8-3.5 10.3-4.2 1.3-8.8 0-11-2.8" stroke="#38BDF8" stroke-width="5" stroke-linecap="round" fill="none" />
+          </svg>
+          <strong style="font-family: var(--font-display); color: var(--text-primary);">KhanSoft</strong>
+        </span>
+        <span aria-hidden="true">·</span>
+        <p>Copyright © Md Ashraful Hakim Khan Siddiquee. All rights reserved.</p>
+      </div>
       <div class="meta-inline">
-        <span>German vocabulary A1 to B1 Complete Dataset (2,731 Words · A1, A2 &amp; B1)</span>
+        <span>KhanSoft · German vocabulary A1 to B1 Complete Dataset (2,731 Words · A1, A2 &amp; B1)</span>
       </div>
     </div>
   </footer>
@@ -2476,9 +3423,10 @@
       });
 
       // Mode Navigation
-      let currentMode = "flashcards";
+      let currentMode = "home";
       const navButtons = document.querySelectorAll(".nav-link[data-mode]");
       const modeSections = {
+        home: document.getElementById("mode-home"),
         flashcards: document.getElementById("mode-flashcards"),
         categories: document.getElementById("mode-categories"),
         quiz: document.getElementById("mode-quiz"),
@@ -2496,7 +3444,14 @@
           modeSections[key].classList.toggle("active", key === targetMode);
         });
 
-        if (targetMode === "categories") {
+        const levelBar = document.getElementById("globalLevelSwitcherBar");
+        if (levelBar) {
+          levelBar.style.display = (targetMode === "home") ? "none" : "flex";
+        }
+
+        if (targetMode === "home") {
+          renderLandingPageStats();
+        } else if (targetMode === "categories") {
           renderCategoriesList();
         } else if (targetMode === "hard") {
           renderHardWordsMode();
@@ -2507,6 +3462,7 @@
         } else if (targetMode === "quiz" && quizSubMode === "audio" && !quizAnswered && quizQuestions[quizCurrentIdx]) {
           speakGerman(quizQuestions[quizCurrentIdx].target.speakableWord);
         }
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
       navButtons.forEach(function(btn) {
@@ -2517,7 +3473,7 @@
 
       document.getElementById("brandHomeLink").addEventListener("click", function(e) {
         e.preventDefault();
-        switchMode("flashcards");
+        switchMode("home");
       });
 
       function updateHardCountsUI() {
@@ -4531,6 +5487,294 @@
         }
       }, 1000);
 
+      // ==========================================
+      // MODE 0: GORGEOUS LANDING PAGE INTERACTIVE LOGIC
+      // ==========================================
+      let spotlightLevel = "A1";
+      let spotlightCurrentItem = null;
+      let spotlightGrammarOpen = false;
+      let activeGrammarLabGender = "der";
+
+      function pickSpotlightWord(level) {
+        const pool = VOCAB.filter(function(item) {
+          return item.level === level && item.exDe && item.exDe.length > 8;
+        });
+        if (pool.length === 0) return VOCAB[0];
+        const idx = Math.floor(Math.random() * pool.length);
+        return pool[idx];
+      }
+
+      function renderSpotlightCard() {
+        if (!spotlightCurrentItem) {
+          spotlightCurrentItem = pickSpotlightWord(spotlightLevel);
+        }
+        const item = spotlightCurrentItem;
+        if (!item) return;
+
+        document.getElementById("spotlightLessonMeta").textContent = item.catName;
+        document.getElementById("spotlightCefrBadge").innerHTML = getCefrBadgeHtml(item.level);
+
+        const genderEl = document.getElementById("spotlightGenderBadge");
+        genderEl.textContent = item.genderLabel;
+        genderEl.className = item.genderClass;
+
+        document.getElementById("spotlightWordDe").textContent = item.de;
+        document.getElementById("spotlightWordPlural").textContent = item.pluralNote || "";
+        document.getElementById("spotlightWordEn").textContent = item.en;
+        document.getElementById("spotlightWordBn").textContent = item.bn ? ("বাংলা: " + item.bn) : "";
+        document.getElementById("spotlightSentDe").textContent = item.exDe;
+        document.getElementById("spotlightSentEn").textContent = item.exEn;
+
+        const isHard = hardWordIds.has(item.id);
+        const starBtn = document.getElementById("spotlightStarBtn");
+        starBtn.classList.toggle("active", isHard);
+        starBtn.textContent = isHard ? "★ Hard" : "☆ Hard";
+
+        const details = getWordDetails(item);
+        document.getElementById("spotlightGrammarTitle").textContent = details.grammarBlock.title;
+        document.getElementById("spotlightGrammarTable").innerHTML =
+          "<tbody>" +
+          details.grammarBlock.rows.slice(0, 5).map(function(r) {
+            return '<tr><td class="conj-pronoun">' + escapeHtml(r[0]) + '</td><td class="conj-form">' + escapeHtml(r[1]) + '</td></tr>';
+          }).join("") +
+          "</tbody>";
+
+        document.getElementById("spotlightSentenceView").style.display = spotlightGrammarOpen ? "none" : "flex";
+        document.getElementById("spotlightGrammarView").style.display = spotlightGrammarOpen ? "flex" : "none";
+        document.getElementById("spotlightGrammarBtnText").textContent =
+          spotlightGrammarOpen ? "▴ Show Example Sentence" : "▾ View Grammar & Cases";
+      }
+
+      function renderGrammarLab(genderCode) {
+        activeGrammarLabGender = genderCode;
+        const gridEl = document.getElementById("landingGrammarLabGrid");
+        if (!gridEl) return;
+
+        // Pick 2 representative items from A1, 2 from A2, 2 from B1
+        const levels = ["A1", "A2", "B1"];
+        const selected = [];
+        levels.forEach(function(lv) {
+          const matches = VOCAB.filter(function(w) {
+            if (genderCode === "other") {
+              return w.level === lv && isVerbEntry(w);
+            }
+            return w.level === lv && w.genderCode === genderCode;
+          });
+          if (matches.length > 0) selected.push(matches[0]);
+          if (matches.length > 4) selected.push(matches[4]);
+        });
+
+        gridEl.innerHTML = selected.slice(0, 6).map(function(item) {
+          const details = getWordDetails(item);
+          const summaryLine = details.grammarBlock.rows.slice(0, 3).map(function(r) {
+            return r[0] + ": " + r[1];
+          }).join(" · ");
+          return (
+            '<div class="grammar-sample-item">' +
+              '<div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem;">' +
+                '<div class="meta-inline">' +
+                  getCefrBadgeHtml(item.level) +
+                  '<span class="' + item.genderClass + '">' + escapeHtml(item.genderLabel) + '</span>' +
+                '</div>' +
+                '<button type="button" class="icon-btn" style="min-height:30px; padding:0.2rem 0.55rem;" data-lab-speak="' + item.id + '">🔊</button>' +
+              '</div>' +
+              '<div style="font-family:var(--font-display); font-weight:700; font-size:1.05rem; color:var(--text-primary);">' + escapeHtml(item.de) + '</div>' +
+              '<div style="font-size:0.875rem; font-weight:600; color:var(--accent-primary);">' + escapeHtml(item.en) + (item.bn ? ' <span style="color:var(--gender-das);">· ' + escapeHtml(item.bn) + '</span>' : '') + '</div>' +
+              '<div class="meta-inline tabular-nums" style="font-size:0.76rem; padding-top:0.3rem; border-top:1px solid var(--border-hairline);">' +
+                escapeHtml(summaryLine) +
+              '</div>' +
+            '</div>'
+          );
+        }).join("");
+
+        const labelMap = {
+          der: "Maskulin (der) nouns across A1, A2, and B1",
+          die: "Feminin (die) nouns across A1, A2, and B1",
+          das: "Neutrum (das) nouns across A1, A2, and B1",
+          other: "German Verbs with Präsens & Perfekt conjugations across A1, A2, and B1"
+        };
+        document.getElementById("landingGrammarLabSummary").textContent =
+          "Showing " + (labelMap[genderCode] || "German vocabulary");
+      }
+
+      function renderLandingPageStats() {
+        const total = VOCAB.length;
+        const learned = learnedWordIds.size;
+        const studied = Math.max(studiedWordIds.size, learned);
+        const pct = Math.round((learned / total) * 100);
+
+        const masteryCountEl = document.getElementById("landingMasteryCount");
+        if (masteryCountEl) {
+          masteryCountEl.textContent = learned + " / " + total;
+          document.getElementById("landingMasterySub").textContent =
+            pct + "% learned · " + studied + " studied · " + hardWordIds.size + " hard words";
+        }
+
+        const streakCountEl = document.getElementById("landingStreakCount");
+        if (streakCountEl) {
+          streakCountEl.textContent = "🔥 " + streakState.currentStreak + "d Streak";
+          document.getElementById("landingStreakSub").textContent =
+            "Today: " + formatMMSS(streakState.todaySeconds) + " / 15:00 goal (Best: " + streakState.bestStreak + "d)";
+        }
+
+        // Update A1, A2, B1 progress bars on the 3 CEFR Pathway Cards
+        ["A1", "A2", "B1"].forEach(function(lv) {
+          const lvItems = VOCAB.filter(function(w) { return w.level === lv; });
+          const lvTotal = lvItems.length;
+          const lvLearned = lvItems.filter(function(w) { return learnedWordIds.has(w.id); }).length;
+          const lvPct = lvTotal > 0 ? Math.round((lvLearned / lvTotal) * 100) : 0;
+          const txtEl = document.getElementById("landing" + lv + "ProgressText");
+          const barEl = document.getElementById("landing" + lv + "ProgressBar");
+          if (txtEl) txtEl.textContent = lvLearned + " / " + lvTotal + " (" + lvPct + "%)";
+          if (barEl) barEl.style.width = lvPct + "%";
+        });
+
+        renderSpotlightCard();
+      }
+
+      // Wire Landing Page Event Listeners
+      document.querySelectorAll("[data-spot-level]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          spotlightLevel = btn.getAttribute("data-spot-level");
+          document.querySelectorAll("[data-spot-level]").forEach(function(b) {
+            b.classList.toggle("active", b === btn);
+          });
+          spotlightCurrentItem = pickSpotlightWord(spotlightLevel);
+          renderSpotlightCard();
+        });
+      });
+
+      document.getElementById("spotlightRandomBtn").addEventListener("click", function() {
+        spotlightCurrentItem = pickSpotlightWord(spotlightLevel);
+        renderSpotlightCard();
+      });
+
+      document.getElementById("spotlightSpeakWordBtn").addEventListener("click", function() {
+        if (spotlightCurrentItem) speakGerman(spotlightCurrentItem.speakableWord);
+      });
+
+      document.getElementById("spotlightSpeakSentBtn").addEventListener("click", function() {
+        if (spotlightCurrentItem) speakGerman(spotlightCurrentItem.exDe);
+      });
+
+      document.getElementById("spotlightToggleGrammarBtn").addEventListener("click", function() {
+        spotlightGrammarOpen = !spotlightGrammarOpen;
+        renderSpotlightCard();
+      });
+
+      document.getElementById("spotlightStarBtn").addEventListener("click", function() {
+        if (spotlightCurrentItem) {
+          toggleHardWord(spotlightCurrentItem.id);
+          renderSpotlightCard();
+        }
+      });
+
+      document.getElementById("spotlightOpenInFcBtn").addEventListener("click", function() {
+        if (!spotlightCurrentItem) return;
+        setActiveLevel(spotlightCurrentItem.level);
+        const idxInDeck = fcDeck.findIndex(function(c) { return c.id === spotlightCurrentItem.id; });
+        if (idxInDeck !== -1) {
+          fcIndex = idxInDeck;
+          renderCurrentFlashcard();
+        }
+        switchMode("flashcards");
+      });
+
+      // Hero Quick Search Form
+      document.getElementById("landingQuickSearchForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const q = document.getElementById("landingQuickSearchInput").value.trim();
+        setActiveLevel("ALL");
+        document.getElementById("catLessonSelect").value = "all";
+        document.getElementById("catSearchInput").value = q;
+        switchMode("categories");
+      });
+
+      document.querySelectorAll("[data-quick-query]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          const q = btn.getAttribute("data-quick-query");
+          setActiveLevel("ALL");
+          document.getElementById("catLessonSelect").value = "all";
+          document.getElementById("catSearchInput").value = q;
+          switchMode("categories");
+        });
+      });
+
+      // Hero Main CTAs
+      document.getElementById("heroStartFlashcardsBtn").addEventListener("click", function() {
+        switchMode("flashcards");
+      });
+      document.getElementById("heroStartQuizBtn").addEventListener("click", function() {
+        quizSubMode = "standard";
+        document.getElementById("quizModeStandardBtn").classList.add("active");
+        document.getElementById("quizModeAudioBtn").classList.remove("active");
+        startNewQuiz();
+        switchMode("quiz");
+      });
+      document.getElementById("heroStartAudioQuizBtn").addEventListener("click", function() {
+        quizSubMode = "audio";
+        document.getElementById("quizModeAudioBtn").classList.add("active");
+        document.getElementById("quizModeStandardBtn").classList.remove("active");
+        startNewQuiz();
+        switchMode("quiz");
+      });
+      document.getElementById("heroExploreLessonsBtn").addEventListener("click", function() {
+        switchMode("categories");
+      });
+
+      // CEFR Tier Cards Launch Buttons & Sample Audio
+      document.querySelectorAll("[data-launch-level]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          const lv = btn.getAttribute("data-launch-level");
+          const mode = btn.getAttribute("data-launch-mode") || "flashcards";
+          setActiveLevel(lv);
+          switchMode(mode);
+        });
+      });
+
+      document.querySelectorAll("[data-speak-sample]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          speakGerman(btn.getAttribute("data-speak-sample"));
+        });
+      });
+
+      // Grammar Lab Tabs & Actions
+      document.querySelectorAll("[data-lab-gender]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          const g = btn.getAttribute("data-lab-gender");
+          document.querySelectorAll("[data-lab-gender]").forEach(function(b) {
+            b.classList.toggle("active", b === btn);
+          });
+          renderGrammarLab(g);
+        });
+      });
+
+      document.getElementById("landingGrammarLabGrid").addEventListener("click", function(e) {
+        const spk = e.target.closest("[data-lab-speak]");
+        if (spk) {
+          const item = VOCAB_BY_ID.get(Number(spk.getAttribute("data-lab-speak")));
+          if (item) speakGerman(item.speakableWord);
+        }
+      });
+
+      document.getElementById("landingGrammarPracticeBtn").addEventListener("click", function() {
+        setActiveLevel("ALL");
+        document.getElementById("fcCategorySelect").value = "all";
+        document.getElementById("fcGenderSelect").value = activeGrammarLabGender;
+        buildFlashcardDeck();
+        switchMode("flashcards");
+      });
+
+      document.getElementById("landingLedgerProgressCell").addEventListener("click", function() { switchMode("progress"); });
+      document.getElementById("landingLedgerStreakCell").addEventListener("click", openStreakModal);
+
+      // Bento Mode Buttons
+      document.querySelectorAll("[data-bento-mode]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          switchMode(btn.getAttribute("data-bento-mode"));
+        });
+      });
+
       // Initialize App
       initTheme();
       loadHardWords();
@@ -4542,6 +5786,8 @@
       updateStreakUI();
       buildFlashcardDeck();
       startNewQuiz();
+      renderGrammarLab("der");
+      renderLandingPageStats();
     })();
   </script>
 </body>
