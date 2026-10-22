@@ -717,7 +717,7 @@
       padding: 1.25rem;
       margin-bottom: 1.5rem;
       display: grid;
-      grid-template-columns: 1.3fr 1.2fr auto;
+      grid-template-columns: 1.15fr 1.45fr auto;
       gap: 1rem;
       align-items: end;
     }
@@ -726,6 +726,77 @@
       .filter-toolbar {
         grid-template-columns: 1fr;
       }
+    }
+
+    .recent-searches-bar {
+      display: none;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.375rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .recent-searches-bar.visible {
+      display: flex;
+    }
+
+    .recent-searches-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-right: 0.15rem;
+      white-space: nowrap;
+    }
+
+    .recent-search-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.22rem 0.55rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .recent-search-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      background-color: var(--bg-canvas);
+    }
+
+    .recent-search-btn.active {
+      border-color: var(--accent-primary);
+      background-color: var(--accent-primary);
+      color: #FFFFFF;
+    }
+
+    html[data-theme="dark"] .recent-search-btn.active {
+      color: #0F172A;
+    }
+
+    .recent-search-clear-btn {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 0.18rem 0.42rem;
+      border-radius: 0.3rem;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .recent-search-clear-btn:hover {
+      color: var(--status-wrong-text);
+      background-color: var(--status-wrong-bg);
     }
 
     .segmented-filter {
@@ -3066,6 +3137,7 @@
 
         <div class="form-group">
           <label for="catSearchInput" class="form-label">Live Search (German, English, or বাংলা)</label>
+          <div id="catRecentSearchesBar" class="recent-searches-bar" role="region" aria-label="Recent Searches"></div>
           <input type="search" id="catSearchInput" class="search-input" placeholder="Search in German, English, or বাংলা (e.g. Wohnung, apple, বাড়ি)..." />
         </div>
 
@@ -5311,6 +5383,88 @@
       // ==========================================
       let catActiveArticle = "all";
       const expandedExplorerIds = new Set();
+      const STORAGE_KEY_RECENT_SEARCHES = "de_a1_b1_recent_searches_v1";
+      const MAX_RECENT_SEARCHES = 5;
+      let recentSearches = [];
+      let recentSearchDebounceTimer = null;
+
+      function loadRecentSearches() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY_RECENT_SEARCHES);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) {
+              recentSearches = parsed
+                .map(function(item) { return String(item || "").trim(); })
+                .filter(function(item) { return item.length > 0; })
+                .slice(0, MAX_RECENT_SEARCHES);
+            }
+          }
+        } catch (e) {
+          recentSearches = [];
+        }
+      }
+
+      function saveRecentSearches() {
+        try {
+          localStorage.setItem(STORAGE_KEY_RECENT_SEARCHES, JSON.stringify(recentSearches.slice(0, MAX_RECENT_SEARCHES)));
+        } catch (e) {}
+      }
+
+      function addRecentSearchQuery(rawQuery, replacePartialPrefix) {
+        const cleaned = String(rawQuery || "").trim();
+        if (!cleaned) return;
+        const lower = cleaned.toLowerCase();
+
+        // If the user is continuing to type a word that extends the top recent search, replace the prefix
+        if (
+          replacePartialPrefix &&
+          recentSearches.length > 0 &&
+          lower.length > recentSearches[0].length &&
+          lower.indexOf(recentSearches[0].toLowerCase()) === 0
+        ) {
+          recentSearches.shift();
+        }
+
+        recentSearches = recentSearches.filter(function(existing) {
+          return existing.toLowerCase() !== lower;
+        });
+        recentSearches.unshift(cleaned);
+        if (recentSearches.length > MAX_RECENT_SEARCHES) {
+          recentSearches = recentSearches.slice(0, MAX_RECENT_SEARCHES);
+        }
+        saveRecentSearches();
+        renderRecentSearchesBar();
+      }
+
+      function renderRecentSearchesBar() {
+        const barEl = document.getElementById("catRecentSearchesBar");
+        if (!barEl) return;
+
+        if (!recentSearches || recentSearches.length === 0) {
+          barEl.classList.remove("visible");
+          barEl.innerHTML = "";
+          return;
+        }
+
+        const currentVal = (document.getElementById("catSearchInput").value || "").trim().toLowerCase();
+        barEl.classList.add("visible");
+
+        const buttonsHtml = recentSearches.slice(0, MAX_RECENT_SEARCHES).map(function(term) {
+          const isActive = currentVal && currentVal === term.toLowerCase();
+          return (
+            '<button type="button" class="recent-search-btn ' + (isActive ? 'active' : '') + '" data-recent-query="' + escapeHtml(term) + '" title="Search again for &quot;' + escapeHtml(term) + '&quot;">' +
+              '<span aria-hidden="true">↺</span>' +
+              '<span>' + escapeHtml(term) + '</span>' +
+            '</button>'
+          );
+        }).join("");
+
+        barEl.innerHTML =
+          '<span class="recent-searches-label">Recent Searches:</span>' +
+          buttonsHtml +
+          '<button type="button" class="recent-search-clear-btn" id="catClearRecentSearchesBtn" title="Clear recent search history">✕ Clear</button>';
+      }
 
       function escapeHtml(str) {
         return String(str)
@@ -5324,6 +5478,7 @@
         const lessonVal = document.getElementById("catLessonSelect").value;
         const query = document.getElementById("catSearchInput").value.trim().toLowerCase();
         const container = document.getElementById("catWordsList");
+        renderRecentSearchesBar();
 
         const matches = getLevelVocab().filter(function(item) {
           if (lessonVal !== "all" && item.catIdx !== Number(lessonVal)) {
@@ -5397,7 +5552,59 @@
       }
 
       document.getElementById("catLessonSelect").addEventListener("change", renderCategoriesList);
-      document.getElementById("catSearchInput").addEventListener("input", renderCategoriesList);
+
+      document.getElementById("catSearchInput").addEventListener("input", function() {
+        renderCategoriesList();
+        if (recentSearchDebounceTimer) {
+          clearTimeout(recentSearchDebounceTimer);
+        }
+        const val = this.value.trim();
+        if (val.length >= 2) {
+          recentSearchDebounceTimer = setTimeout(function() {
+            addRecentSearchQuery(val, true);
+          }, 700);
+        }
+      });
+
+      document.getElementById("catSearchInput").addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+          if (recentSearchDebounceTimer) {
+            clearTimeout(recentSearchDebounceTimer);
+          }
+          const val = this.value.trim();
+          if (val) {
+            addRecentSearchQuery(val, true);
+          }
+        }
+      });
+
+      document.getElementById("catSearchInput").addEventListener("change", function() {
+        if (recentSearchDebounceTimer) {
+          clearTimeout(recentSearchDebounceTimer);
+        }
+        const val = this.value.trim();
+        if (val) {
+          addRecentSearchQuery(val, true);
+        }
+      });
+
+      document.getElementById("catRecentSearchesBar").addEventListener("click", function(e) {
+        const clearBtn = e.target.closest("#catClearRecentSearchesBtn");
+        if (clearBtn) {
+          recentSearches = [];
+          saveRecentSearches();
+          renderRecentSearchesBar();
+          return;
+        }
+        const recentBtn = e.target.closest("[data-recent-query]");
+        if (recentBtn) {
+          const query = recentBtn.getAttribute("data-recent-query") || "";
+          const searchInput = document.getElementById("catSearchInput");
+          searchInput.value = query;
+          addRecentSearchQuery(query, false);
+          renderCategoriesList();
+        }
+      });
 
       document.querySelectorAll(".seg-btn[data-art]").forEach(function(btn) {
         btn.addEventListener("click", function() {
@@ -7111,6 +7318,7 @@
         setActiveLevel("ALL");
         document.getElementById("catLessonSelect").value = "all";
         document.getElementById("catSearchInput").value = q;
+        if (q) addRecentSearchQuery(q, false);
         switchMode("categories");
       });
 
@@ -7120,6 +7328,7 @@
           setActiveLevel("ALL");
           document.getElementById("catLessonSelect").value = "all";
           document.getElementById("catSearchInput").value = q;
+          if (q) addRecentSearchQuery(q, false);
           switchMode("categories");
         });
       });
@@ -7204,6 +7413,8 @@
       loadHardWords();
       loadProgressData();
       loadStreakState();
+      loadRecentSearches();
+      renderRecentSearchesBar();
       populateCategorySelects();
       updateHardCountsUI();
       updateProgressNavBadge();
