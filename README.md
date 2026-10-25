@@ -5,7 +5,7 @@
 [![Vocabulary Count](https://img.shields.io/badge/Lexicon-2%2C731_Words-indigo?style=for-the-badge)](#-complete-lexicon-overview)
 [![License: All Rights Reserved](https://img.shields.io/badge/License-All_Rights_Reserved-red?style=for-the-badge)](LICENSE)
 
-> 🚀 **Live Web Application:** [https://ashrafulsiddiquee.github.io/GermanVocabulary_A1-B1/](https://ashrafulsiddiquee.github.io/GermanVocabulary_A1-B1/)
+> **Live Web Application:** [https://ashrafulsiddiquee.github.io/GermanVocabulary_A1-B1/](https://ashrafulsiddiquee.github.io/GermanVocabulary_A1-B1/)
 
 ---
 
